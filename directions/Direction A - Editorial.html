@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cator Street — Editorial</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..500&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --ink:#16213A;
+    --ink-soft:#3c4660;
+    --navy:#13294B;
+    --navy-deep:#0E1F3A;
+    --green:#3C6E47;
+    --green-deep:#2f5a3a;
+    --paper:#F7F4EE;
+    --paper-2:#EFEAE0;
+    --line:#d9d2c4;
+    --line-soft:#e6e0d3;
+    --sans:"Hanken Grotesk", system-ui, sans-serif;
+    --serif:"Newsreader", Georgia, serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:var(--sans);
+    background:var(--paper);
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+    line-height:1.6;
+  }
+  .wrap{max-width:1240px;margin:0 auto;padding:0 56px;}
+  a{color:inherit;text-decoration:none;}
+  .eyebrow{
+    font-size:12px;letter-spacing:.22em;text-transform:uppercase;
+    font-weight:600;color:var(--green);
+  }
+  .serif{font-family:var(--serif);}
+  .it{font-style:italic;font-family:var(--serif);font-weight:380;}
+
+  /* ---------- header ---------- */
+  header{
+    position:sticky;top:0;z-index:50;
+    background:rgba(247,244,238,.86);backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{display:flex;align-items:center;justify-content:space-between;height:78px;}
+  .brand{display:flex;align-items:baseline;gap:12px;}
+  .brand .mark{font-family:var(--serif);font-size:23px;font-weight:500;letter-spacing:-.01em;white-space:nowrap;}
+  .brand{white-space:nowrap;align-items:center;}
+  .logo-img{height:46px;width:auto;display:block;}
+  .plaque{display:inline-flex;align-items:center;justify-content:center;background:#fff;border-radius:11px;padding:9px 15px;box-shadow:0 8px 22px -12px rgba(0,0,0,.55);}
+  nav.menu a{white-space:nowrap;}
+  .brand .sub{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink-soft);font-weight:600;}
+  nav.menu{display:flex;gap:38px;}
+  nav.menu a{font-size:13.5px;font-weight:500;color:var(--ink-soft);position:relative;padding:4px 0;}
+  nav.menu a:hover{color:var(--ink);}
+  nav.menu a::after{content:"";position:absolute;left:0;bottom:0;width:0;height:1px;background:var(--green);transition:width .3s;}
+  nav.menu a:hover::after{width:100%;}
+  .btn{
+    display:inline-flex;align-items:center;gap:9px;
+    font-family:var(--sans);font-size:13.5px;font-weight:600;
+    padding:12px 22px;border-radius:2px;cursor:pointer;border:1px solid transparent;
+    transition:.25s;white-space:nowrap;
+  }
+  .btn-green{background:var(--green);color:#fff;}
+  .btn-green:hover{background:var(--green-deep);}
+  .btn-ghost{border-color:var(--ink);color:var(--ink);background:transparent;}
+  .btn-ghost:hover{background:var(--ink);color:var(--paper);}
+  .arr{transition:transform .25s;}
+  .btn:hover .arr{transform:translateX(4px);}
+
+  /* ---------- hero ---------- */
+  .hero{padding:88px 0 0;}
+  .hero .eyebrow{margin-bottom:30px;}
+  .hero h1{
+    font-family:var(--serif);font-weight:400;
+    font-size:84px;line-height:1.02;letter-spacing:-.02em;
+    max-width:13ch;
+  }
+  .hero h1 em{font-style:italic;color:var(--navy);font-weight:380;}
+  .hero-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:64px;align-items:end;margin-top:48px;padding-bottom:56px;border-bottom:1px solid var(--line);}
+  .lead{font-size:19px;line-height:1.65;color:var(--ink-soft);max-width:42ch;}
+  .hero-cta{display:flex;gap:16px;margin-top:34px;flex-wrap:wrap;}
+  .hero-index{border-left:1px solid var(--line);padding-left:32px;}
+  .hero-index .lbl{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft);font-weight:600;margin-bottom:18px;}
+  .hero-index ul{list-style:none;}
+  .hero-index li{display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--line-soft);font-size:15px;}
+  .hero-index li span:last-child{font-family:var(--serif);color:var(--green);}
+
+  /* placeholder */
+  .ph{
+    position:relative;overflow:hidden;
+    background:
+      repeating-linear-gradient(135deg, rgba(19,41,75,.045) 0 2px, transparent 2px 11px),
+      var(--paper-2);
+    border:1px solid var(--line);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .ph span{font-family:ui-monospace,"SF Mono",Menlo,monospace;font-size:11px;letter-spacing:.08em;color:#9a917f;text-transform:uppercase;background:var(--paper);padding:6px 12px;border:1px solid var(--line);}
+  .hero-img{height:430px;margin-top:64px;}
+
+  /* ---------- section frame ---------- */
+  section{padding:104px 0;}
+  .sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:24px;margin-bottom:56px;}
+  .sec-head h2{font-family:var(--serif);font-weight:400;font-size:44px;letter-spacing:-.015em;line-height:1.05;}
+  .sec-head h2 em{font-style:italic;color:var(--navy);}
+  .sec-num{font-family:var(--serif);font-size:15px;color:var(--green);letter-spacing:.05em;}
+
+  /* why */
+  .why{background:var(--paper);}
+  .why-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 72px;}
+  .why-item{padding:34px 0;border-top:1px solid var(--line);display:grid;grid-template-columns:54px 1fr;gap:8px;}
+  .why-item .n{font-family:var(--serif);font-size:18px;color:var(--green);}
+  .why-item h3{font-family:var(--serif);font-weight:500;font-size:24px;margin-bottom:12px;letter-spacing:-.01em;}
+  .why-item p{font-size:15.5px;color:var(--ink-soft);max-width:46ch;}
+
+  /* services */
+  .services{background:var(--paper-2);}
+  .svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;}
+  .svc{background:var(--paper);border:1px solid var(--line);padding:38px 34px 32px;display:flex;flex-direction:column;min-height:340px;transition:.3s;}
+  .svc:hover{transform:translateY(-4px);box-shadow:0 24px 50px -28px rgba(19,41,75,.35);}
+  .svc .n{font-family:var(--serif);font-size:15px;color:var(--green);margin-bottom:26px;}
+  .svc h3{font-family:var(--serif);font-weight:500;font-size:26px;line-height:1.1;letter-spacing:-.01em;margin-bottom:16px;}
+  .svc p{font-size:15px;color:var(--ink-soft);flex:1;}
+  .svc .more{margin-top:24px;font-size:13.5px;font-weight:600;color:var(--green);display:inline-flex;gap:8px;align-items:center;}
+  .svc:hover .more .arr{transform:translateX(4px);}
+
+  /* testimonials */
+  .testi{background:var(--navy-deep);color:var(--paper);}
+  .testi .eyebrow{color:#7fae89;}
+  .testi .sec-head h2{color:var(--paper);}
+  .testi .sec-num{color:#7fae89;}
+  .testi .sec-head{border:0;}
+  .t-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:48px;}
+  .t-card{border-top:1px solid rgba(255,255,255,.16);padding-top:28px;}
+  .t-card .q{font-family:var(--serif);font-style:italic;font-weight:300;font-size:21px;line-height:1.45;color:#eef0f4;}
+  .t-card .who{margin-top:28px;}
+  .t-card .who .nm{font-size:14.5px;font-weight:600;}
+  .t-card .who .ro{font-size:12.5px;letter-spacing:.04em;color:#9fb0c9;margin-top:2px;}
+
+  /* cta */
+  .cta{background:var(--navy);color:var(--paper);text-align:center;}
+  .cta h2{font-family:var(--serif);font-weight:400;font-size:54px;letter-spacing:-.02em;line-height:1.05;}
+  .cta h2 em{font-style:italic;color:#8fc09a;}
+  .cta p{max-width:54ch;margin:24px auto 36px;font-size:18px;color:#c3cbd9;}
+  .cta .actions{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;}
+  .cta .btn-ghost{border-color:rgba(255,255,255,.4);color:var(--paper);}
+  .cta .btn-ghost:hover{background:var(--paper);color:var(--navy);border-color:var(--paper);}
+
+  /* footer */
+  footer{background:var(--navy-deep);color:#c3cbd9;padding:74px 0 40px;}
+  .f-top{display:grid;grid-template-columns:1.6fr 1fr 1fr 1.2fr;gap:40px;padding-bottom:48px;border-bottom:1px solid rgba(255,255,255,.12);}
+  .f-brand .mark{font-family:var(--serif);font-size:24px;color:#fff;}
+  .f-brand .logo-img{height:52px;}
+  .f-brand .sub{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;margin-top:6px;color:#8493ab;}
+  .f-brand p{margin-top:20px;font-size:14px;max-width:34ch;line-height:1.6;}
+  .f-col h4{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#8493ab;font-weight:600;margin-bottom:18px;}
+  .f-col a,.f-col p{display:block;font-size:14px;margin-bottom:11px;color:#c3cbd9;}
+  .f-col a:hover{color:#fff;}
+  .f-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:26px;font-size:12.5px;color:#7888a0;flex-wrap:wrap;gap:12px;}
+  @media(max-width:1080px){
+    .hero h1{font-size:60px;}
+    .hero-grid,.why-grid,.svc-grid,.t-grid,.f-top{grid-template-columns:1fr;gap:32px;}
+    .hero-index{border-left:0;padding-left:0;border-top:1px solid var(--line);padding-top:24px;}
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap nav">
+    <a href="#" class="brand"><img class="logo-img" src="../assets/cator-logo.png" alt="Cator Street Property Services" /></a>
+    <nav class="menu">
+      <a href="#why">Why us</a>
+      <a href="#services">Services</a>
+      <a href="#testimonials">Clients</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <a href="#contact" class="btn btn-green">Contact us <span class="arr">→</span></a>
+  </div>
+</header>
+
+<main>
+  <!-- HERO -->
+  <section class="hero" style="padding-bottom:0;">
+    <div class="wrap">
+      <div class="eyebrow">Property Management · London &amp; Kent</div>
+      <h1>Reliable property management you can <em>trust.</em></h1>
+      <div class="hero-grid">
+        <div>
+          <p class="lead">A personal, owner-led service for landlords across London and Kent — transparent, proactive, and completely hands-on. You deal with us directly, every step of the way.</p>
+          <div class="hero-cta">
+            <a href="#contact" class="btn btn-green">Request a free consultation <span class="arr">→</span></a>
+            <a href="#services" class="btn btn-ghost">Explore services</a>
+          </div>
+        </div>
+        <div class="hero-index">
+          <div class="lbl">What we do</div>
+          <ul>
+            <li><span>Full Property Management</span><span>01</span></li>
+            <li><span>Tenant Find Service</span><span>02</span></li>
+            <li><span>Rent Collection</span><span>03</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="ph hero-img"><span>Georgian terrace · London exterior — replace</span></div>
+    </div>
+  </section>
+
+  <!-- WHY -->
+  <section class="why" id="why">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>Why landlords <em>choose us</em></h2>
+        <span class="sec-num">/ 01 — Approach</span>
+      </div>
+      <div class="why-grid">
+        <div class="why-item"><span class="n">01</span><div><h3>Personal service</h3><p>You'll always deal with us directly. No call centres, no handovers, no confusion. We take time to understand your property, your priorities and your goals — delivering a consistent service you can rely on.</p></div></div>
+        <div class="why-item"><span class="n">02</span><div><h3>Thoughtful tenant matching</h3><p>We place tenants who aren't just available on paper, but right for your property long-term. Every placement is carefully considered to support stability, reduce risk and create successful tenancies.</p></div></div>
+        <div class="why-item"><span class="n">03</span><div><h3>Clear, honest &amp; transparent</h3><p>No hidden costs, no unnecessary mark-ups, no surprises. We're upfront at every stage, so you always know where you stand and can make informed decisions with confidence.</p></div></div>
+        <div class="why-item"><span class="n">04</span><div><h3>Proactive management</h3><p>From maintenance to communication, we take a proactive approach — addressing issues early, keeping you informed, and ensuring everything runs smoothly so you don't have to worry.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="services" id="services">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>Our <em>services</em></h2>
+        <span class="sec-num">/ 02 — What we offer</span>
+      </div>
+      <div class="svc-grid">
+        <div class="svc"><span class="n">01</span><h3>Full Property Management</h3><p>A comprehensive service covering everything from tenant sourcing to maintenance, rent collection and compliance — handled end to end.</p><a href="#contact" class="more">Learn more <span class="arr">→</span></a></div>
+        <div class="svc"><span class="n">02</span><h3>Tenant Find Service</h3><p>Professional tenant sourcing with thorough referencing, ensuring you get reliable, quality tenants matched to your property.</p><a href="#contact" class="more">Learn more <span class="arr">→</span></a></div>
+        <div class="svc"><span class="n">03</span><h3>Rent Collection</h3><p>Reliable rent collection with prompt payment processing and considered arrears management whenever it's needed.</p><a href="#contact" class="more">Learn more <span class="arr">→</span></a></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="testi" id="testimonials">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>What our <em>clients say</em></h2>
+        <span class="sec-num">/ 03 — In their words</span>
+      </div>
+      <div class="t-grid">
+        <div class="t-card"><p class="q">“Outstanding service from start to finish. They found excellent tenants quickly and handle everything professionally. I can finally relax knowing my property is in safe hands.”</p><div class="who"><div class="nm">Boris Adetunde</div><div class="ro">Landlord · Catford</div></div></div>
+        <div class="t-card"><p class="q">“After years of managing my properties myself, switching to their service was the best decision I've made. Their expertise and attention to detail is exceptional.”</p><div class="who"><div class="nm">David Thompson</div><div class="ro">Property Owner · Lewisham</div></div></div>
+        <div class="t-card"><p class="q">“Transparent pricing, excellent communication, and they genuinely care about maximising my rental income. Highly recommended.”</p><div class="who"><div class="nm">Abdul Waheed</div><div class="ro">Landlord · South East London</div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta" id="contact">
+    <div class="wrap">
+      <h2>Ready to get <em>started?</em></h2>
+      <p>Contact us today for a free consultation and discover how we can help you maximise your rental income while minimising the stress of property management.</p>
+      <div class="actions">
+        <a href="mailto:info@catorstreet.com" class="btn btn-green">Request a free consultation <span class="arr">→</span></a>
+        <a href="tel:+447901224288" class="btn btn-ghost">+44 7901 224288</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="f-top">
+      <div class="f-brand">
+        <span class="plaque"><img class="logo-img" src="../assets/cator-logo.png" alt="Cator Street Property Services" /></span>
+        <p>Professional, owner-led property management for landlords across London and Kent.</p>
+      </div>
+      <div class="f-col">
+        <h4>Explore</h4>
+        <a href="#why">Why us</a>
+        <a href="#services">Services</a>
+        <a href="#testimonials">Clients</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <div class="f-col">
+        <h4>Services</h4>
+        <a href="#services">Full Management</a>
+        <a href="#services">Tenant Find</a>
+        <a href="#services">Rent Collection</a>
+      </div>
+      <div class="f-col">
+        <h4>Contact</h4>
+        <p>+44 7901 224288</p>
+        <p>info@catorstreet.com</p>
+        <p>The Old Coach House, New Road Avenue, Chatham, Kent ME4 6BB</p>
+      </div>
+    </div>
+    <div class="f-bottom">
+      <span>© 2026 Cator Street Property Services. All rights reserved.</span>
+      <span>Terms &amp; Conditions · Privacy</span>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
