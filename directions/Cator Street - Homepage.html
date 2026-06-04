@@ -38,6 +38,7 @@
   nav.menu a:hover{color:var(--ink);}
   nav.menu a::after{content:"";position:absolute;left:0;bottom:0;width:0;height:1px;background:var(--green);transition:width .3s;}
   nav.menu a:hover::after{width:100%;}
+  .menu-toggle{display:none;}
 
   /* placeholder */
   .ph{position:relative;overflow:hidden;background:repeating-linear-gradient(135deg, rgba(19,41,75,.045) 0 2px, transparent 2px 11px),var(--paper-2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;}
@@ -147,15 +148,30 @@
     .sec-head h2{font-size:38px;}
     .contact .inner{grid-template-columns:1fr;gap:40px;}
     .contact h2{font-size:40px;}
+    nav.menu a{min-width:44px;min-height:44px;display:flex;align-items:center;}
+    .svc .more{min-height:44px;}
+    .cd a{display:inline-flex;min-height:44px;align-items:center;}
+    .f-col a{min-height:40px;display:flex;align-items:center;margin-bottom:2px;}
   }
   @media(max-width:760px){
     .wrap{padding:0 22px;}
     header{position:relative;}
-    .nav{height:auto;padding-top:16px;padding-bottom:16px;display:grid;grid-template-columns:1fr;gap:14px;align-items:center;}
+    .nav{height:auto;padding-top:16px;padding-bottom:16px;display:grid;grid-template-columns:1fr 44px;gap:12px 16px;align-items:center;}
+    .brand{min-height:44px;align-items:center;}
     .logo-img{height:38px;max-width:196px;}
-    nav.menu{order:3;display:grid;grid-template-columns:repeat(2,1fr);gap:8px 12px;width:100%;padding-top:12px;border-top:1px solid var(--line);}
-    nav.menu a{font-size:12.5px;padding:5px 4px;text-align:center;white-space:normal;}
-    .nav > .btn{order:2;padding:10px 13px;font-size:12.5px;width:100%;justify-content:center;}
+    .menu-toggle{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border:1px solid var(--line);border-radius:2px;background:transparent;color:var(--ink);cursor:pointer;}
+    .menu-toggle span{position:relative;display:block;width:18px;height:2px;background:currentColor;transition:background .2s;}
+    .menu-toggle span::before,.menu-toggle span::after{content:"";position:absolute;left:0;width:18px;height:2px;background:currentColor;transition:transform .2s,top .2s;}
+    .menu-toggle span::before{top:-6px;}
+    .menu-toggle span::after{top:6px;}
+    .nav.is-open .menu-toggle span{background:transparent;}
+    .nav.is-open .menu-toggle span::before{top:0;transform:rotate(45deg);}
+    .nav.is-open .menu-toggle span::after{top:0;transform:rotate(-45deg);}
+    nav.menu{grid-column:1/-1;order:3;display:grid;grid-template-columns:1fr;gap:0;width:100%;max-height:0;overflow:hidden;padding-top:0;border-top:0;opacity:0;transition:max-height .25s ease,opacity .2s ease,padding .2s ease,border-color .2s ease;}
+    .nav.is-open nav.menu{max-height:260px;opacity:1;padding-top:10px;border-top:1px solid var(--line);}
+    nav.menu a{font-size:14px;min-height:46px;padding:10px 4px;text-align:left;justify-content:flex-start;white-space:normal;border-bottom:1px solid var(--line-soft);}
+    .nav > .btn{grid-column:1/-1;order:4;display:none;min-height:46px;padding:10px 13px;font-size:13px;width:100%;justify-content:center;}
+    .nav.is-open > .btn{display:inline-flex;}
     .hero{padding-top:44px;}
     .hero .eyebrow{margin-bottom:18px;font-size:10.5px;letter-spacing:.16em;}
     .hero h1{font-size:43px;line-height:1.05;max-width:10.5ch;letter-spacing:0;}
@@ -174,6 +190,7 @@
     .svc-grid{gap:18px;}
     .svc .svc-img{height:190px;}
     .svc .body{padding:26px 24px 28px;}
+    .svc .more{padding-top:10px;margin-top:16px;}
     .big-quote{font-size:30px;max-width:none;}
     .t-card .who{display:block;}
     .t-card .ro{display:block;margin-top:2px;}
@@ -182,12 +199,14 @@
     .contact h2{font-size:35px;letter-spacing:0;}
     .contact .sub{font-size:16px;}
     .contact-details{margin-top:30px;gap:18px;}
+    .cd .v{font-size:15.5px;overflow-wrap:anywhere;}
     .field-row{grid-template-columns:1fr;gap:0;}
     .form-card{padding:26px 22px;border-radius:4px;}
     .form-card .btn-green{white-space:normal;}
     footer{padding:54px 0 32px;}
     .f-top{gap:30px;padding-bottom:34px;}
     .f-brand .logo-img{height:44px;}
+    .f-col a{min-height:36px;}
     .f-bottom{display:block;}
     .f-bottom span{display:block;}
     .f-bottom span + span{margin-top:8px;}
@@ -205,7 +224,8 @@
 <header>
   <div class="wrap nav">
     <a href="#" class="brand"><img class="logo-img" src="../assets/cator-logo.png" alt="Cator Street Property Services" /></a>
-    <nav class="menu">
+    <button class="menu-toggle" type="button" aria-label="Open menu" aria-controls="primary-menu" aria-expanded="false"><span aria-hidden="true"></span></button>
+    <nav class="menu" id="primary-menu">
       <a href="#why">Why us</a>
       <a href="#services">Services</a>
       <a href="#testimonials">Clients</a>
@@ -356,5 +376,32 @@
     </div>
   </div>
 </footer>
+<script>
+  const nav = document.querySelector(".nav");
+  const menuToggle = document.querySelector(".menu-toggle");
+  const primaryMenu = document.querySelector("#primary-menu");
+  const menuLinks = document.querySelectorAll("#primary-menu a, .nav > .btn");
+  const mobileMenu = window.matchMedia("(max-width: 760px)");
+
+  function setMenu(open) {
+    const isMobile = mobileMenu.matches;
+    nav.classList.toggle("is-open", isMobile && open);
+    menuToggle.setAttribute("aria-expanded", String(isMobile && open));
+    menuToggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    primaryMenu.setAttribute("aria-hidden", String(isMobile && !open));
+    menuLinks.forEach((link) => {
+      if (isMobile) link.tabIndex = open ? 0 : -1;
+      else link.removeAttribute("tabindex");
+    });
+  }
+
+  setMenu(false);
+  menuToggle.addEventListener("click", () => setMenu(!nav.classList.contains("is-open")));
+  menuLinks.forEach((link) => link.addEventListener("click", () => setMenu(false)));
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") setMenu(false);
+  });
+  mobileMenu.addEventListener("change", () => setMenu(false));
+</script>
 </body>
 </html>
