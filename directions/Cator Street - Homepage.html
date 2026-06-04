@@ -111,6 +111,23 @@
   .trust-badge .v{font-family:var(--serif);font-size:26px;line-height:1.05;color:var(--green);margin-top:8px;}
   .trust-badge p{font-size:14px;margin-top:12px;max-width:none;}
   .trust-badge a{margin-top:auto;padding-top:18px;font-size:13px;font-weight:700;color:var(--green);}
+  .accreditations{grid-column:1/-1;margin-top:46px;padding-top:28px;border-top:1px solid var(--line);overflow:hidden;}
+  .accreditations .ticker-head{display:flex;align-items:center;justify-content:space-between;gap:24px;margin-bottom:18px;}
+  .accreditations .ticker-head span:last-child{font-size:13.5px;color:var(--ink-soft);}
+  .ticker{position:relative;margin:0 -56px;overflow:hidden;}
+  .ticker::before,.ticker::after{content:"";position:absolute;top:0;bottom:0;width:120px;z-index:2;pointer-events:none;}
+  .ticker::before{left:0;background:linear-gradient(90deg,var(--paper),rgba(247,244,238,0));}
+  .ticker::after{right:0;background:linear-gradient(270deg,var(--paper),rgba(247,244,238,0));}
+  .ticker-track{display:flex;gap:18px;width:max-content;animation:ticker 34s linear infinite;}
+  .ticker:hover .ticker-track{animation-play-state:paused;}
+  .ticker-item{width:210px;height:96px;background:#fff;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;padding:18px 24px;flex:0 0 auto;}
+  .ticker-item img{max-width:100%;max-height:58px;object-fit:contain;display:block;}
+  @keyframes ticker{from{transform:translateX(0);}to{transform:translateX(calc(-50% - 9px));}}
+  @media(prefers-reduced-motion:reduce){
+    .ticker-track{animation:none;flex-wrap:wrap;width:auto;justify-content:center;}
+    .ticker{margin:0;overflow:visible;}
+    .ticker::before,.ticker::after{display:none;}
+  }
 
   /* ---------- TESTIMONIALS (Direction B asymmetric, light) ---------- */
   .testi{background:var(--paper);}
@@ -221,6 +238,13 @@
     .trust-badge{min-height:auto;padding:22px;}
     .trust-badge img{height:46px;margin-bottom:18px;}
     .trust-badge .v{font-size:23px;}
+    .accreditations{margin-top:32px;padding-top:24px;}
+    .accreditations .ticker-head{display:block;margin-bottom:16px;}
+    .accreditations .ticker-head span:last-child{display:block;margin-top:8px;}
+    .ticker{margin:0 -22px;}
+    .ticker::before,.ticker::after{width:54px;}
+    .ticker-item{width:172px;height:86px;padding:16px;}
+    .ticker-item img{max-height:50px;}
     .big-quote{font-size:30px;max-width:none;}
     .t-card .who{display:block;}
     .t-card .ro{display:block;margin-top:2px;}
@@ -413,6 +437,28 @@
           <span class="v">PRS058035</span>
           <p>Independent redress membership for property services.</p>
           <a href="../assets/documents/prs-membership-certificate.pdf">View certificate <span class="arr">→</span></a>
+        </div>
+      </div>
+      <div class="accreditations" aria-label="Accreditations and protection schemes">
+        <div class="ticker-head">
+          <span class="eyebrow">Accreditations &amp; schemes</span>
+          <span>Recognised memberships, redress and deposit protection partners.</span>
+        </div>
+        <div class="ticker">
+          <div class="ticker-track">
+            <div class="ticker-item"><img src="../assets/trust/client-money-protect.png" alt="Client Money Protect" /></div>
+            <div class="ticker-item"><img src="../assets/trust/property-redress-scheme.png" alt="Property Redress Scheme" /></div>
+            <div class="ticker-item"><img src="../assets/trust/deposit-protection-service.png" alt="Deposit Protection Service" /></div>
+            <div class="ticker-item"><img src="../assets/trust/nrla.png" alt="National Residential Landlords Association" /></div>
+            <div class="ticker-item"><img src="../assets/trust/london-landlord-accreditation.jpg" alt="London Landlord Accreditation Scheme" /></div>
+            <div class="ticker-item"><img src="../assets/trust/atlas.png" alt="ATLAS" /></div>
+            <div class="ticker-item" aria-hidden="true"><img src="../assets/trust/client-money-protect.png" alt="" /></div>
+            <div class="ticker-item" aria-hidden="true"><img src="../assets/trust/property-redress-scheme.png" alt="" /></div>
+            <div class="ticker-item" aria-hidden="true"><img src="../assets/trust/deposit-protection-service.png" alt="" /></div>
+            <div class="ticker-item" aria-hidden="true"><img src="../assets/trust/nrla.png" alt="" /></div>
+            <div class="ticker-item" aria-hidden="true"><img src="../assets/trust/london-landlord-accreditation.jpg" alt="" /></div>
+            <div class="ticker-item" aria-hidden="true"><img src="../assets/trust/atlas.png" alt="" /></div>
+          </div>
         </div>
       </div>
     </div>
