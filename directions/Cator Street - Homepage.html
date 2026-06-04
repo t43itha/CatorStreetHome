@@ -33,8 +33,8 @@
   .nav{display:flex;align-items:center;justify-content:space-between;height:78px;}
   .brand{display:flex;align-items:center;white-space:nowrap;}
   .logo-img{height:46px;width:auto;display:block;}
-  nav.menu{display:flex;gap:38px;}
-  nav.menu a{font-size:13.5px;font-weight:500;color:var(--ink-soft);white-space:nowrap;position:relative;padding:4px 0;}
+  nav.menu{display:flex;gap:30px;}
+  nav.menu a{font-size:13.5px;font-weight:500;color:var(--ink-soft);white-space:nowrap;position:relative;min-height:36px;padding:4px 0;display:flex;align-items:center;}
   nav.menu a:hover{color:var(--ink);}
   nav.menu a::after{content:"";position:absolute;left:0;bottom:0;width:0;height:1px;background:var(--green);transition:width .3s;}
   nav.menu a:hover::after{width:100%;}
@@ -77,17 +77,40 @@
 
   /* ---------- SERVICES (Direction B cards w/ imagery, light) ---------- */
   .services{background:var(--paper-2);}
-  .svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;}
+  .svc-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:28px;}
   .svc{border:1px solid var(--line);background:var(--paper);display:flex;flex-direction:column;overflow:hidden;transition:.3s;}
   .svc:hover{transform:translateY(-5px);box-shadow:0 26px 52px -30px rgba(19,41,75,.38);border-color:var(--green);}
   .svc .ph{height:164px;border:0;border-bottom:1px solid var(--line);}
-  .svc .svc-img{height:164px;width:100%;object-fit:cover;display:block;border-bottom:1px solid var(--line);}
+  .svc .svc-img{height:190px;width:100%;object-fit:cover;display:block;border-bottom:1px solid var(--line);}
   .svc .body{padding:32px 30px 34px;display:flex;flex-direction:column;flex:1;}
   .svc .n{font-family:var(--serif);font-size:14px;color:var(--green);margin-bottom:12px;}
   .svc h3{font-family:var(--serif);font-weight:500;font-size:25px;line-height:1.1;letter-spacing:-.01em;margin-bottom:13px;}
-  .svc p{font-size:15px;color:var(--ink-soft);flex:1;}
-  .svc .more{margin-top:24px;font-size:13.5px;font-weight:600;color:var(--green);display:inline-flex;gap:8px;align-items:center;}
+  .svc p{font-size:15px;color:var(--ink-soft);}
+  .svc .summary{min-height:72px;}
+  .svc-meta{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:22px;padding-top:20px;border-top:1px solid var(--line-soft);}
+  .svc-meta .k{display:block;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft);font-weight:700;margin-bottom:7px;}
+  .svc-meta .v{display:block;font-family:var(--serif);font-size:19px;line-height:1.15;color:var(--navy);}
+  .svc ul{list-style:none;margin-top:20px;display:grid;gap:8px;}
+  .svc li{position:relative;padding-left:16px;font-size:14px;line-height:1.45;color:var(--ink-soft);}
+  .svc li::before{content:"";position:absolute;left:0;top:.72em;width:5px;height:5px;border-radius:50%;background:var(--green);}
+  .svc .best{margin-top:18px;padding:14px 16px;background:#fffdf8;border:1px solid var(--line-soft);font-size:13.5px;color:var(--ink-soft);}
+  .svc .best strong{color:var(--ink);}
+  .svc .note{margin-top:14px;font-size:12.5px;line-height:1.5;color:var(--ink-soft);}
+  .svc .more{margin-top:24px;min-height:36px;font-size:13.5px;font-weight:600;color:var(--green);display:inline-flex;gap:8px;align-items:center;}
   .svc:hover .more .arr{transform:translateX(4px);}
+
+  /* ---------- TRUST BADGES ---------- */
+  .trust{background:var(--paper);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+  .trust-layout{display:grid;grid-template-columns:.9fr 1.4fr;gap:52px;align-items:center;}
+  .trust h2{font-family:var(--serif);font-size:40px;font-weight:400;line-height:1.08;letter-spacing:-.01em;margin-top:14px;}
+  .trust p{margin-top:16px;color:var(--ink-soft);max-width:40ch;}
+  .badge-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;}
+  .trust-badge{background:#fffdf8;border:1px solid var(--line);padding:24px;display:flex;flex-direction:column;min-height:220px;}
+  .trust-badge img{height:54px;width:100%;object-fit:contain;object-position:left center;margin-bottom:22px;}
+  .trust-badge .k{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft);font-weight:700;}
+  .trust-badge .v{font-family:var(--serif);font-size:26px;line-height:1.05;color:var(--green);margin-top:8px;}
+  .trust-badge p{font-size:14px;margin-top:12px;max-width:none;}
+  .trust-badge a{margin-top:auto;padding-top:18px;font-size:13px;font-weight:700;color:var(--green);}
 
   /* ---------- TESTIMONIALS (Direction B asymmetric, light) ---------- */
   .testi{background:var(--paper);}
@@ -116,6 +139,7 @@
   .cd{display:flex;flex-direction:column;gap:3px;}
   .cd .k{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#8493ab;font-weight:600;}
   .cd .v{font-size:16px;color:#eef0f4;}
+  .cd a{display:inline-flex;min-height:36px;align-items:center;}
   .cd a:hover{color:#8fc09a;}
 
   /* form card */
@@ -132,7 +156,7 @@
 
   /* ---------- footer ---------- */
   footer{background:var(--navy-deep);color:#c3cbd9;padding:74px 0 40px;}
-  .f-top{display:grid;grid-template-columns:1.6fr 1fr 1fr 1.2fr;gap:40px;padding-bottom:48px;border-bottom:1px solid rgba(255,255,255,.12);}
+  .f-top{display:grid;grid-template-columns:1.45fr .85fr .95fr 1fr 1.2fr;gap:32px;padding-bottom:48px;border-bottom:1px solid rgba(255,255,255,.12);}
   .plaque{display:inline-flex;align-items:center;justify-content:center;background:#fff;border-radius:11px;padding:11px 16px;box-shadow:0 8px 22px -12px rgba(0,0,0,.5);}
   .f-brand .logo-img{height:52px;}
   .f-brand p{margin-top:20px;font-size:14px;max-width:34ch;line-height:1.6;}
@@ -143,7 +167,7 @@
 
   @media(max-width:1080px){
     .hero h1{font-size:58px;}
-    .hero-grid,.why-grid,.svc-grid,.t-layout,.f-top{grid-template-columns:1fr;gap:28px;}
+    .hero-grid,.why-grid,.svc-grid,.trust-layout,.badge-grid,.t-layout,.f-top{grid-template-columns:1fr;gap:28px;}
     .hero-index{border-left:0;padding-left:0;border-top:1px solid var(--line);padding-top:24px;}
     .sec-head h2{font-size:38px;}
     .contact .inner{grid-template-columns:1fr;gap:40px;}
@@ -168,7 +192,7 @@
     .nav.is-open .menu-toggle span::before{top:0;transform:rotate(45deg);}
     .nav.is-open .menu-toggle span::after{top:0;transform:rotate(-45deg);}
     nav.menu{grid-column:1/-1;order:3;display:grid;grid-template-columns:1fr;gap:0;width:100%;max-height:0;overflow:hidden;padding-top:0;border-top:0;opacity:0;transition:max-height .25s ease,opacity .2s ease,padding .2s ease,border-color .2s ease;}
-    .nav.is-open nav.menu{max-height:260px;opacity:1;padding-top:10px;border-top:1px solid var(--line);}
+    .nav.is-open nav.menu{max-height:340px;opacity:1;padding-top:10px;border-top:1px solid var(--line);}
     nav.menu a{font-size:14px;min-height:46px;padding:10px 4px;text-align:left;justify-content:flex-start;white-space:normal;border-bottom:1px solid var(--line-soft);}
     .nav > .btn{grid-column:1/-1;order:4;display:none;min-height:46px;padding:10px 13px;font-size:13px;width:100%;justify-content:center;}
     .nav.is-open > .btn{display:inline-flex;}
@@ -190,7 +214,13 @@
     .svc-grid{gap:18px;}
     .svc .svc-img{height:190px;}
     .svc .body{padding:26px 24px 28px;}
+    .svc .summary{min-height:0;}
+    .svc-meta{grid-template-columns:1fr;gap:12px;}
     .svc .more{padding-top:10px;margin-top:16px;}
+    .trust h2{font-size:31px;}
+    .trust-badge{min-height:auto;padding:22px;}
+    .trust-badge img{height:46px;margin-bottom:18px;}
+    .trust-badge .v{font-size:23px;}
     .big-quote{font-size:30px;max-width:none;}
     .t-card .who{display:block;}
     .t-card .ro{display:block;margin-top:2px;}
@@ -228,6 +258,7 @@
     <nav class="menu" id="primary-menu">
       <a href="#why">Why us</a>
       <a href="#services">Services</a>
+      <a href="#trust">Trust</a>
       <a href="#testimonials">Clients</a>
       <a href="#contact">Contact</a>
     </nav>
@@ -255,6 +286,7 @@
             <li><span>Full Property Management</span><span>01</span></li>
             <li><span>Tenant Find Service</span><span>02</span></li>
             <li><span>Rent Collection</span><span>03</span></li>
+            <li><span>Property Find Service</span><span>04</span></li>
           </ul>
         </div>
       </div>
@@ -283,12 +315,105 @@
     <div class="wrap">
       <div class="sec-head">
         <span class="eyebrow">What we offer</span>
-        <h2>Three ways we <em>look after</em> your property</h2>
+        <h2>Four ways we <em>look after</em> your property</h2>
       </div>
       <div class="svc-grid">
-        <div class="svc"><img class="svc-img" src="../assets/svc-management.png" alt="Letting agent showing a managed London living room" /><div class="body"><span class="n">01</span><h3>Full Property Management</h3><p>A comprehensive service covering everything from tenant sourcing to maintenance, rent collection and compliance — handled end to end.</p><a href="#contact" class="more">Learn more <span class="arr">→</span></a></div></div>
-        <div class="svc"><img class="svc-img" src="../assets/svc-tenant-find.png" alt="Agent with keys at the door of a London townhouse" /><div class="body"><span class="n">02</span><h3>Tenant Find Service</h3><p>Professional tenant sourcing with thorough referencing, ensuring you get reliable, quality tenants matched to your property.</p><a href="#contact" class="more">Learn more <span class="arr">→</span></a></div></div>
-        <div class="svc"><img class="svc-img" src="../assets/svc-rent-collection.png" alt="Desk with rental income dashboard, keys and card reader" /><div class="body"><span class="n">03</span><h3>Rent Collection</h3><p>Reliable rent collection with prompt payment processing and considered arrears management whenever it's needed.</p><a href="#contact" class="more">Learn more <span class="arr">→</span></a></div></div>
+        <div class="svc">
+          <img class="svc-img" src="../assets/svc-tenant-find.png" alt="Agent with keys at the door of a London townhouse" />
+          <div class="body">
+            <span class="n">01</span>
+            <h3>Tenant Find Only</h3>
+            <p class="summary">For landlords who prefer to self-manage but want professional support sourcing a high-quality tenant and setting up the tenancy correctly.</p>
+            <div class="svc-meta"><span><span class="k">Pricing</span><span class="v">One-off fee £699</span></span><span><span class="k">Also known as</span><span class="v">Let Only Service</span></span></div>
+            <ul>
+              <li>Marketing, advertising and accompanied viewings</li>
+              <li>Tenant referencing, affordability and landlord checks</li>
+              <li>Right to Rent checks and tenancy-term negotiation</li>
+              <li>Move-in coordination and deposit registration guidance</li>
+            </ul>
+            <div class="best"><strong>Best for:</strong> experienced landlords, hands-on investors and landlords with existing systems.</div>
+            <a href="#contact" class="more">Discuss tenant find <span class="arr">→</span></a>
+          </div>
+        </div>
+        <div class="svc">
+          <img class="svc-img" src="../assets/svc-management.png" alt="Letting agent showing a managed London living room" />
+          <div class="body">
+            <span class="n">02</span>
+            <h3>Full Management</h3>
+            <p class="summary">Complete, end-to-end management for landlords who want peace of mind that their investment is professionally managed and compliant.</p>
+            <div class="svc-meta"><span><span class="k">Pricing</span><span class="v">8-10% of rent pcm</span></span><span><span class="k">Includes</span><span class="v">Tenant Find</span></span></div>
+            <ul>
+              <li>Monthly rent collection, statements and arrears reporting</li>
+              <li>Routine inspections, maintenance coordination and contractors</li>
+              <li>Compliance monitoring across safety, licensing and tenancy records</li>
+              <li>Tenant communication, issue resolution and end-of-tenancy support</li>
+            </ul>
+            <div class="best"><strong>Best for:</strong> busy professionals, overseas landlords, first-time landlords and portfolio investors.</div>
+            <a href="#contact" class="more">Discuss management <span class="arr">→</span></a>
+          </div>
+        </div>
+        <div class="svc">
+          <img class="svc-img" src="../assets/svc-rent-collection.png" alt="Desk with rental income dashboard, keys and card reader" />
+          <div class="body">
+            <span class="n">03</span>
+            <h3>Rent Collection</h3>
+            <p class="summary">Professional rent administration for landlords who handle day-to-day management but want reliable payment monitoring and reporting.</p>
+            <div class="svc-meta"><span><span class="k">Pricing</span><span class="v">4-5% of rent</span></span><span><span class="k">Minimum</span><span class="v">£50 pcm</span></span></div>
+            <ul>
+              <li>Collection and transfer of monthly rental payments</li>
+              <li>Monthly landlord statements and transaction records</li>
+              <li>Arrears monitoring, chasing and tenant rent communication</li>
+              <li>Annual rent review and tenancy-documentation reminders</li>
+            </ul>
+            <div class="best"><strong>Best for:</strong> self-managing landlords, overseas landlords and investors needing rent oversight without full management.</div>
+            <p class="note">Rent Collection is not a Rent Guarantee Service. Funds are transferred once received from the tenant.</p>
+            <a href="#contact" class="more">Discuss rent collection <span class="arr">→</span></a>
+          </div>
+        </div>
+        <div class="svc">
+          <img class="svc-img" src="../assets/hero-terrace.png" alt="London terraced houses suitable for buy-to-let investment" />
+          <div class="body">
+            <span class="n">04</span>
+            <h3>Property Find</h3>
+            <p class="summary">A buy-to-let sourcing service for investors who want help identifying, assessing and securing suitable rental-property opportunities.</p>
+            <div class="svc-meta"><span><span class="k">Pricing</span><span class="v">1% of purchase price</span></span><span><span class="k">Includes</span><span class="v">Let Only package</span></span></div>
+            <ul>
+              <li>Suitable buy-to-let properties based on your criteria</li>
+              <li>Investment analysis covering yield, cash flow and risk</li>
+              <li>Shortlisted deals with supporting data</li>
+              <li>Negotiation support, introductions and transition to letting</li>
+            </ul>
+            <div class="best"><strong>Best for:</strong> investors seeking data-led sourcing and a smooth path into let only or full management.</div>
+            <a href="#contact" class="more">Discuss property find <span class="arr">→</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUST BADGES -->
+  <section class="trust" id="trust">
+    <div class="wrap trust-layout">
+      <div>
+        <span class="eyebrow">Protected &amp; accountable</span>
+        <h2>Registered schemes that give landlords confidence.</h2>
+        <p>Cator Street Property Services is a member of Client Money Protect and The Property Redress Scheme, giving landlords clear routes for client money protection and independent redress.</p>
+      </div>
+      <div class="badge-grid">
+        <div class="trust-badge">
+          <img src="../assets/trust/client-money-protect.png" alt="Client Money Protect logo" />
+          <span class="k">Client Money Protect</span>
+          <span class="v">CMP015256</span>
+          <p>Client money protection for landlords and tenants.</p>
+          <a href="../assets/documents/cmp-membership-certificate.pdf">View certificate <span class="arr">→</span></a>
+        </div>
+        <div class="trust-badge">
+          <img src="../assets/trust/property-redress-scheme.png" alt="Property Redress Scheme logo" />
+          <span class="k">Property Redress Scheme</span>
+          <span class="v">PRS058035</span>
+          <p>Independent redress membership for property services.</p>
+          <a href="../assets/documents/prs-membership-certificate.pdf">View certificate <span class="arr">→</span></a>
+        </div>
       </div>
     </div>
   </section>
@@ -334,7 +459,7 @@
           <div class="field"><label for="phone">Phone</label><input id="phone" type="tel" name="phone" placeholder="07000 000000" /></div>
         </div>
         <div class="field"><label for="email">Email address</label><input id="email" type="email" name="email" placeholder="you@example.com" required /></div>
-        <div class="field"><label for="interest">I'm interested in</label><select id="interest" name="interested_in"><option>Full Property Management</option><option>Tenant Find Service</option><option>Rent Collection</option><option>General enquiry</option></select></div>
+        <div class="field"><label for="interest">I'm interested in</label><select id="interest" name="interested_in"><option>Tenant Find Only</option><option>Full Property Management</option><option>Rent Collection</option><option>Property Find</option><option>General enquiry</option></select></div>
         <div class="field"><label for="message">How can we help?</label><textarea id="message" name="message" placeholder="Tell us a little about your property and what you're looking for…" required></textarea></div>
         <button type="submit" class="btn btn-green">Send enquiry <span class="arr">→</span></button>
         <p class="form-note">We'll reply within one working day. No call centres — you'll hear directly from us.</p>
@@ -354,14 +479,23 @@
         <h4>Explore</h4>
         <a href="#why">Why us</a>
         <a href="#services">Services</a>
+        <a href="#trust">Trust &amp; compliance</a>
         <a href="#testimonials">Clients</a>
         <a href="#contact">Contact</a>
       </div>
       <div class="f-col">
         <h4>Services</h4>
+        <a href="#services">Tenant Find Only</a>
         <a href="#services">Full Management</a>
-        <a href="#services">Tenant Find</a>
         <a href="#services">Rent Collection</a>
+        <a href="#services">Property Find</a>
+      </div>
+      <div class="f-col">
+        <h4>Compliance</h4>
+        <a href="../assets/documents/cmp-membership-certificate.pdf">CMP Certificate</a>
+        <a href="../assets/documents/prs-membership-certificate.pdf">PRS Certificate</a>
+        <a href="../assets/documents/complaints-procedure.pdf">Complaints Procedure</a>
+        <a href="../assets/documents/privacy-notice-gdpr.pdf">Privacy Notice</a>
       </div>
       <div class="f-col">
         <h4>Contact</h4>
@@ -372,7 +506,7 @@
     </div>
     <div class="f-bottom">
       <span>© 2026 Cator Street Property Services. All rights reserved.</span>
-      <span>Terms &amp; Conditions · Privacy</span>
+      <span>Client Money Protect CMP015256 · Property Redress Scheme PRS058035</span>
     </div>
   </div>
 </footer>
