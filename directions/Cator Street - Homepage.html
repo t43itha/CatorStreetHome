@@ -96,6 +96,13 @@
   .svc .best{margin-top:18px;padding:14px 16px;background:#fffdf8;border:1px solid var(--line-soft);font-size:13.5px;color:var(--ink-soft);}
   .svc .best strong{color:var(--ink);}
   .svc .note{margin-top:14px;font-size:12.5px;line-height:1.5;color:var(--ink-soft);}
+  .svc-details{margin-top:22px;border-top:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft);}
+  .svc-details summary{list-style:none;min-height:48px;display:flex;align-items:center;justify-content:space-between;gap:18px;cursor:pointer;font-size:13px;font-weight:700;color:var(--green);}
+  .svc-details summary::-webkit-details-marker{display:none;}
+  .svc-details summary::after{content:"+";font-family:var(--serif);font-size:24px;line-height:1;color:var(--green);transition:transform .2s;}
+  .svc-details[open] summary::after{content:"−";}
+  .svc-details[open]{padding-bottom:18px;}
+  .svc-details .svc-meta{margin-top:0;}
   .svc .more{margin-top:24px;min-height:36px;font-size:13.5px;font-weight:600;color:var(--green);display:inline-flex;gap:8px;align-items:center;}
   .svc:hover .more .arr{transform:translateX(4px);}
 
@@ -348,14 +355,17 @@
             <span class="n">01</span>
             <h3>Tenant Find Only</h3>
             <p class="summary">For landlords who prefer to self-manage but want professional support sourcing a high-quality tenant and setting up the tenancy correctly.</p>
-            <div class="svc-meta"><span><span class="k">Pricing</span><span class="v">One-off fee £699</span></span><span><span class="k">Also known as</span><span class="v">Let Only Service</span></span></div>
-            <ul>
-              <li>Marketing, advertising and accompanied viewings</li>
-              <li>Tenant referencing, affordability and landlord checks</li>
-              <li>Right to Rent checks and tenancy-term negotiation</li>
-              <li>Move-in coordination and deposit registration guidance</li>
-            </ul>
-            <div class="best"><strong>Best for:</strong> experienced landlords, hands-on investors and landlords with existing systems.</div>
+            <details class="svc-details">
+              <summary>View pricing &amp; what’s included</summary>
+              <div class="svc-meta"><span><span class="k">Pricing</span><span class="v">One-off fee £699</span></span><span><span class="k">Also known as</span><span class="v">Let Only Service</span></span></div>
+              <ul>
+                <li>Marketing, advertising and accompanied viewings</li>
+                <li>Tenant referencing, affordability and landlord checks</li>
+                <li>Right to Rent checks and tenancy-term negotiation</li>
+                <li>Move-in coordination and deposit registration guidance</li>
+              </ul>
+              <div class="best"><strong>Best for:</strong> experienced landlords, hands-on investors and landlords with existing systems.</div>
+            </details>
             <a href="#contact" class="more">Discuss tenant find <span class="arr">→</span></a>
           </div>
         </div>
@@ -365,14 +375,17 @@
             <span class="n">02</span>
             <h3>Full Management</h3>
             <p class="summary">Complete, end-to-end management for landlords who want peace of mind that their investment is professionally managed and compliant.</p>
-            <div class="svc-meta"><span><span class="k">Pricing</span><span class="v">8-10% of rent pcm</span></span><span><span class="k">Includes</span><span class="v">Tenant Find</span></span></div>
-            <ul>
-              <li>Monthly rent collection, statements and arrears reporting</li>
-              <li>Routine inspections, maintenance coordination and contractors</li>
-              <li>Compliance monitoring across safety, licensing and tenancy records</li>
-              <li>Tenant communication, issue resolution and end-of-tenancy support</li>
-            </ul>
-            <div class="best"><strong>Best for:</strong> busy professionals, overseas landlords, first-time landlords and portfolio investors.</div>
+            <details class="svc-details">
+              <summary>View pricing &amp; what’s included</summary>
+              <div class="svc-meta"><span><span class="k">Pricing</span><span class="v">8-10% of rent pcm</span></span><span><span class="k">Includes</span><span class="v">Tenant Find</span></span></div>
+              <ul>
+                <li>Monthly rent collection, statements and arrears reporting</li>
+                <li>Routine inspections, maintenance coordination and contractors</li>
+                <li>Compliance monitoring across safety, licensing and tenancy records</li>
+                <li>Tenant communication, issue resolution and end-of-tenancy support</li>
+              </ul>
+              <div class="best"><strong>Best for:</strong> busy professionals, overseas landlords, first-time landlords and portfolio investors.</div>
+            </details>
             <a href="#contact" class="more">Discuss management <span class="arr">→</span></a>
           </div>
         </div>
@@ -382,15 +395,18 @@
             <span class="n">03</span>
             <h3>Rent Collection</h3>
             <p class="summary">Professional rent administration for landlords who handle day-to-day management but want reliable payment monitoring and reporting.</p>
-            <div class="svc-meta"><span><span class="k">Pricing</span><span class="v">4-5% of rent</span></span><span><span class="k">Minimum</span><span class="v">£50 pcm</span></span></div>
-            <ul>
-              <li>Collection and transfer of monthly rental payments</li>
-              <li>Monthly landlord statements and transaction records</li>
-              <li>Arrears monitoring, chasing and tenant rent communication</li>
-              <li>Annual rent review and tenancy-documentation reminders</li>
-            </ul>
-            <div class="best"><strong>Best for:</strong> self-managing landlords, overseas landlords and investors needing rent oversight without full management.</div>
-            <p class="note">Rent Collection is not a Rent Guarantee Service. Funds are transferred once received from the tenant.</p>
+            <details class="svc-details">
+              <summary>View pricing &amp; what’s included</summary>
+              <div class="svc-meta"><span><span class="k">Pricing</span><span class="v">4-5% of rent</span></span><span><span class="k">Minimum</span><span class="v">£50 pcm</span></span></div>
+              <ul>
+                <li>Collection and transfer of monthly rental payments</li>
+                <li>Monthly landlord statements and transaction records</li>
+                <li>Arrears monitoring, chasing and tenant rent communication</li>
+                <li>Annual rent review and tenancy-documentation reminders</li>
+              </ul>
+              <div class="best"><strong>Best for:</strong> self-managing landlords, overseas landlords and investors needing rent oversight without full management.</div>
+              <p class="note">Rent Collection is not a Rent Guarantee Service. Funds are transferred once received from the tenant.</p>
+            </details>
             <a href="#contact" class="more">Discuss rent collection <span class="arr">→</span></a>
           </div>
         </div>
@@ -400,14 +416,17 @@
             <span class="n">04</span>
             <h3>Property Find</h3>
             <p class="summary">A buy-to-let sourcing service for investors who want help identifying, assessing and securing suitable rental-property opportunities.</p>
-            <div class="svc-meta"><span><span class="k">Pricing</span><span class="v">1% of purchase price</span></span><span><span class="k">Includes</span><span class="v">Let Only package</span></span></div>
-            <ul>
-              <li>Suitable buy-to-let properties based on your criteria</li>
-              <li>Investment analysis covering yield, cash flow and risk</li>
-              <li>Shortlisted deals with supporting data</li>
-              <li>Negotiation support, introductions and transition to letting</li>
-            </ul>
-            <div class="best"><strong>Best for:</strong> investors seeking data-led sourcing and a smooth path into let only or full management.</div>
+            <details class="svc-details">
+              <summary>View pricing &amp; what’s included</summary>
+              <div class="svc-meta"><span><span class="k">Pricing</span><span class="v">1% of purchase price</span></span><span><span class="k">Includes</span><span class="v">Let Only package</span></span></div>
+              <ul>
+                <li>Suitable buy-to-let properties based on your criteria</li>
+                <li>Investment analysis covering yield, cash flow and risk</li>
+                <li>Shortlisted deals with supporting data</li>
+                <li>Negotiation support, introductions and transition to letting</li>
+              </ul>
+              <div class="best"><strong>Best for:</strong> investors seeking data-led sourcing and a smooth path into let only or full management.</div>
+            </details>
             <a href="#contact" class="more">Discuss property find <span class="arr">→</span></a>
           </div>
         </div>
