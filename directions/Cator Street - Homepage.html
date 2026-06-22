@@ -34,7 +34,7 @@
   .nav{display:flex;align-items:center;justify-content:space-between;height:78px;}
   .brand{display:flex;align-items:center;white-space:nowrap;}
   .logo-img{height:46px;width:auto;display:block;}
-  nav.menu{display:flex;gap:30px;}
+  nav.menu{display:flex;gap:24px;}
   nav.menu a{font-size:13.5px;font-weight:500;color:var(--ink-soft);white-space:nowrap;position:relative;min-height:36px;padding:4px 0;display:flex;align-items:center;}
   nav.menu a:hover{color:var(--ink);}
   nav.menu a::after{content:"";position:absolute;left:0;bottom:0;width:0;height:1px;background:var(--green);transition:width .3s;}
@@ -77,6 +77,14 @@
   .sec-head h2{font-family:var(--serif);font-weight:400;font-size:50px;line-height:1.06;letter-spacing:-.015em;}
   .sec-head h2 em{font-style:italic;color:var(--navy);}
 
+  /* ---------- ABOUT ---------- */
+  .about{background:var(--paper);border-top:1px solid var(--line);}
+  .about-layout{display:grid;grid-template-columns:.95fr 1.25fr;gap:72px;align-items:start;}
+  .about h2{font-family:var(--serif);font-size:52px;font-weight:400;line-height:1.05;letter-spacing:-.015em;margin-top:16px;}
+  .about h2 em{font-style:italic;color:var(--green);}
+  .about-copy{display:grid;gap:18px;color:var(--ink-soft);font-size:17px;line-height:1.72;}
+  .about-signoff{margin-top:12px;padding-top:24px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:10px 18px;color:var(--green);font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;}
+
   /* ---------- WHY (Direction B grid, light) ---------- */
   .why{background:var(--paper);}
   .why-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1px solid var(--line);}
@@ -116,6 +124,20 @@
   .svc-details .svc-meta{margin-top:0;}
   .svc .more{margin-top:24px;min-height:36px;font-size:13.5px;font-weight:600;color:var(--green);display:inline-flex;gap:8px;align-items:center;}
   .svc:hover .more .arr{transform:translateX(4px);}
+
+  /* ---------- SERVICE COMPARISON ---------- */
+  .comparison{background:var(--paper);border-top:1px solid var(--line);}
+  .compare-intro{max-width:760px;color:var(--ink-soft);font-size:16.5px;line-height:1.7;margin-top:-34px;margin-bottom:34px;}
+  .compare-table-wrap{overflow-x:auto;border:1px solid var(--line);background:#fffdf8;}
+  .compare-table{width:100%;border-collapse:collapse;min-width:720px;}
+  .compare-table th,.compare-table td{padding:16px 18px;border-bottom:1px solid var(--line-soft);text-align:left;font-size:14.5px;}
+  .compare-table th{font-size:11px;letter-spacing:.17em;text-transform:uppercase;color:var(--ink-soft);font-weight:700;background:var(--paper);}
+  .compare-table th:first-child,.compare-table td:first-child{width:34%;color:var(--ink);font-weight:600;}
+  .compare-table tr:last-child td{border-bottom:0;}
+  .compare-table td:not(:first-child){text-align:center;color:var(--ink-soft);}
+  .compare-table .yes{color:var(--green);font-weight:700;}
+  .compare-table .limited{color:var(--navy);font-weight:600;}
+  .compare-note{margin-top:18px;color:var(--ink-soft);font-size:13.5px;line-height:1.65;max-width:92ch;}
 
   /* ---------- TRUST BADGES ---------- */
   .trust{background:var(--paper);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
@@ -162,6 +184,24 @@
   .t-card .nm{font-weight:600;font-size:14px;}
   .t-card .ro{font-size:12.5px;color:var(--ink-soft);}
 
+  /* ---------- FAQ ---------- */
+  .faq{background:var(--paper-2);border-top:1px solid var(--line);}
+  .faq-layout{display:grid;grid-template-columns:.75fr 1.4fr;gap:56px;align-items:start;}
+  .faq h2{font-family:var(--serif);font-size:46px;font-weight:400;line-height:1.08;letter-spacing:-.015em;margin-top:16px;}
+  .faq h2 em{font-style:italic;color:var(--green);}
+  .faq-intro{margin-top:18px;color:var(--ink-soft);font-size:16px;line-height:1.7;max-width:36ch;}
+  .faq-groups{display:grid;gap:28px;}
+  .faq-group h3{font-family:var(--serif);font-weight:500;font-size:25px;margin-bottom:12px;}
+  .faq-item{border-top:1px solid var(--line);}
+  .faq-item:last-child{border-bottom:1px solid var(--line);}
+  .faq-item summary{list-style:none;cursor:pointer;min-height:56px;display:flex;align-items:center;justify-content:space-between;gap:18px;font-size:15px;font-weight:700;color:var(--ink);}
+  .faq-item summary::-webkit-details-marker{display:none;}
+  .faq-item summary::after{content:"+";font-family:var(--serif);font-size:24px;line-height:1;color:var(--green);}
+  .faq-item[open] summary::after{content:"−";}
+  .faq-item p,.faq-item ul{color:var(--ink-soft);font-size:14.5px;line-height:1.7;margin:0 0 18px;}
+  .faq-item ul{padding-left:18px;}
+  .faq-item a{color:var(--green);font-weight:700;}
+
   /* ---------- CONTACT (Direction B glow band + form) ---------- */
   .contact{position:relative;overflow:hidden;background:var(--navy);color:var(--paper);padding:104px 0;}
   .contact::before{content:"";position:absolute;inset:0;background:radial-gradient(900px 520px at 12% 120%, rgba(60,110,71,.45), transparent 60%);}
@@ -202,7 +242,7 @@
 
   @media(max-width:1080px){
     .hero h1{font-size:58px;}
-    .hero-grid,.why-grid,.svc-grid,.trust-layout,.badge-grid,.t-layout,.f-top{grid-template-columns:1fr;gap:28px;}
+    .hero-grid,.about-layout,.why-grid,.svc-grid,.trust-layout,.badge-grid,.t-layout,.faq-layout,.f-top{grid-template-columns:1fr;gap:28px;}
     .hero-index{border-left:0;padding-left:0;border-top:1px solid var(--line);padding-top:24px;}
     .sec-head h2{font-size:38px;}
     .contact .inner{grid-template-columns:1fr;gap:40px;}
@@ -227,7 +267,7 @@
     .nav.is-open .menu-toggle span::before{top:0;transform:rotate(45deg);}
     .nav.is-open .menu-toggle span::after{top:0;transform:rotate(-45deg);}
     nav.menu{grid-column:1/-1;order:3;display:grid;grid-template-columns:1fr;gap:0;width:100%;max-height:0;overflow:hidden;padding-top:0;border-top:0;opacity:0;transition:max-height .25s ease,opacity .2s ease,padding .2s ease,border-color .2s ease;}
-    .nav.is-open nav.menu{max-height:340px;opacity:1;padding-top:10px;border-top:1px solid var(--line);}
+    .nav.is-open nav.menu{max-height:520px;opacity:1;padding-top:10px;border-top:1px solid var(--line);}
     nav.menu a{font-size:14px;min-height:46px;padding:10px 4px;text-align:left;justify-content:flex-start;white-space:normal;border-bottom:1px solid var(--line-soft);}
     .nav > .btn{grid-column:1/-1;order:4;display:none;min-height:46px;padding:10px 13px;font-size:13px;width:100%;justify-content:center;}
     .nav.is-open > .btn{display:inline-flex;}
@@ -303,9 +343,11 @@
     <a href="#" class="brand"><img class="logo-img" src="../assets/cator-logo.png" alt="Cator Street Property Services" /></a>
     <button class="menu-toggle" type="button" aria-label="Open menu" aria-controls="primary-menu" aria-expanded="false"><span aria-hidden="true"></span></button>
     <nav class="menu" id="primary-menu">
+      <a href="#about">About</a>
       <a href="#why">Why us</a>
       <a href="#services">Services</a>
       <a href="#trust">Trust</a>
+      <a href="#faqs">FAQs</a>
       <a href="#testimonials">Clients</a>
       <a href="#contact">Contact</a>
     </nav>
@@ -365,6 +407,23 @@
         </div>
       </div>
       <img class="hero-img" src="../assets/hero-terrace.png" alt="Georgian terraced houses on a London street" />
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="wrap about-layout">
+      <div>
+        <span class="eyebrow">Welcome to our street</span>
+        <h2>Property should feel <em>personal.</em></h2>
+      </div>
+      <div class="about-copy">
+        <p>Cator Street Property Services was founded on a simple belief: property is about people, communities and creating places where individuals and families can feel at home.</p>
+        <p>The name Cator Street was inspired by the kind of street many of us remember growing up on. A place where neighbours knew each other, children played together, friendships were formed and lasting memories were made.</p>
+        <p>Whether you are a landlord looking to protect and grow your investment, a tenant searching for your next home, or an investor seeking practical guidance, you can expect a service built on professionalism, transparency and genuine care.</p>
+        <p>We combine industry knowledge with a people first approach, giving clients honest advice, clear communication and a high standard of service at every stage of their property journey.</p>
+        <div class="about-signoff"><span>Professional</span><span>Transparent</span><span>Experienced</span></div>
+      </div>
     </div>
   </section>
 
@@ -477,6 +536,43 @@
     </div>
   </section>
 
+  <!-- SERVICE COMPARISON -->
+  <section class="comparison" id="comparison">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Services at a glance</span>
+        <h2>Compare the right level of <em>support</em></h2>
+      </div>
+      <p class="compare-intro">Every landlord has different requirements, experience and availability. This overview shows the core services included in our main letting and management options.</p>
+      <div class="compare-table-wrap" role="region" aria-label="Service comparison table" tabindex="0">
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th scope="col">Service</th>
+              <th scope="col">Tenant Find</th>
+              <th scope="col">Rent Collection</th>
+              <th scope="col">Fully Managed</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Property marketing</td><td class="yes">Included</td><td>Not included</td><td class="yes">Included</td></tr>
+            <tr><td>Tenant referencing</td><td class="yes">Included</td><td>Not included</td><td class="yes">Included</td></tr>
+            <tr><td>Right to Rent checks</td><td class="yes">Included</td><td>Not included</td><td class="yes">Included</td></tr>
+            <tr><td>Tenancy agreement</td><td class="yes">Included</td><td>Not included</td><td class="yes">Included</td></tr>
+            <tr><td>Rent collection</td><td>Not included</td><td class="yes">Included</td><td class="yes">Included</td></tr>
+            <tr><td>Monthly statements</td><td>Not included</td><td class="yes">Included</td><td class="yes">Included</td></tr>
+            <tr><td>Arrears chasing</td><td>Not included</td><td class="yes">Included</td><td class="yes">Included</td></tr>
+            <tr><td>Property inspections</td><td>Not included</td><td>Not included</td><td class="yes">Included</td></tr>
+            <tr><td>Maintenance coordination</td><td>Not included</td><td>Not included</td><td class="yes">Included</td></tr>
+            <tr><td>Tenant management</td><td>Not included</td><td>Not included</td><td class="yes">Included</td></tr>
+            <tr><td>Compliance management</td><td class="limited">Limited</td><td class="limited">Limited</td><td class="yes">Included</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="compare-note">This table is a summary of key services only. Full responsibilities, exclusions, fees and terms are set out in our Terms of Business and service agreements. Landlords remain responsible for legal obligations unless responsibilities are expressly delegated to Cator Street Property Services in writing.</p>
+    </div>
+  </section>
+
   <!-- TRUST BADGES -->
   <section class="trust" id="trust">
     <div class="wrap trust-layout">
@@ -499,6 +595,65 @@
           <span class="v">PRS058035</span>
           <p>Independent redress membership for property services.</p>
           <a href="../assets/documents/prs-membership-certificate.pdf">View certificate <span class="arr">→</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQS -->
+  <section class="faq" id="faqs">
+    <div class="wrap faq-layout">
+      <div>
+        <span class="eyebrow">Frequently asked questions</span>
+        <h2>Clear answers before you <em>instruct us.</em></h2>
+        <p class="faq-intro">A quick guide for landlords, investors and tenants. We keep advice practical and will always confirm the details that apply to your property.</p>
+      </div>
+      <div class="faq-groups">
+        <div class="faq-group">
+          <h3>Landlord FAQs</h3>
+          <details class="faq-item">
+            <summary>Why choose Cator Street Property Services?</summary>
+            <p>We are an independent agency with a personal approach. We take time to understand each client, communicate clearly and work to high professional standards. We are members of a Government approved redress scheme and operate Client Money Protection.</p>
+          </details>
+          <details class="faq-item">
+            <summary>What services do you offer?</summary>
+            <p>We offer tenant find, rent collection, full management, property sourcing and investment support. We can also help with compliance management and supported letting requirements where appropriate.</p>
+          </details>
+          <details class="faq-item">
+            <summary>How much can I rent my property for?</summary>
+            <p>Rental value depends on location, condition, size, amenities and current demand. We provide a free rental appraisal using current market evidence and comparable local properties.</p>
+          </details>
+          <details class="faq-item">
+            <summary>What legal responsibilities do landlords have?</summary>
+            <p>Landlords must comply with all relevant legislation, including gas safety, electrical safety, smoke and carbon monoxide alarm requirements, Right to Rent checks, deposit protection, EPC rules and repairing obligations. We can help you understand and manage these requirements.</p>
+          </details>
+          <details class="faq-item">
+            <summary>What changed under the Renters' Rights Act?</summary>
+            <p>From 1 May 2026, Section 21 no fault evictions ended for new and existing private tenancies in England. The Act also changed tenancy structures, rent increase rules and possession processes. For current official guidance, visit <a href="https://www.gov.uk/government/publications/renters-rights-act-2025-implementation-roadmap/implementing-the-renters-rights-act-2025-our-roadmap-for-reforming-the-private-rented-sector">GOV.UK</a>.</p>
+          </details>
+          <details class="faq-item">
+            <summary>How quickly can you get my property on the market?</summary>
+            <p>Once the required compliance documents and property details are in place, we can usually begin marketing and arrange viewings promptly. Our aim is to reduce void periods while still securing suitable tenants.</p>
+          </details>
+        </div>
+        <div class="faq-group">
+          <h3>Tenant FAQs</h3>
+          <details class="faq-item">
+            <summary>How do I apply for a property?</summary>
+            <p>After viewing a property, we will explain the application steps and the information required. This usually includes identity checks, affordability checks, employment or income information and landlord references where appropriate.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Are deposits protected?</summary>
+            <p>Yes. Any tenancy deposit taken in connection with a tenancy will be protected in an approved Government authorised tenancy deposit scheme within the required legal timescales.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Can tenants request to keep pets?</summary>
+            <p>Yes. Pet requests are considered individually, taking account of the property, the tenancy terms and any relevant landlord instructions.</p>
+          </details>
+          <details class="faq-item">
+            <summary>How do I report maintenance?</summary>
+            <p>Maintenance issues should be reported as soon as possible through the appropriate reporting channel. Emergency issues affecting safety should be reported immediately.</p>
+          </details>
         </div>
       </div>
     </div>
@@ -563,9 +718,11 @@
       </div>
       <div class="f-col">
         <h4>Explore</h4>
+        <a href="#about">About</a>
         <a href="#why">Why us</a>
         <a href="#services">Services</a>
         <a href="#trust">Trust &amp; compliance</a>
+        <a href="#faqs">FAQs</a>
         <a href="#testimonials">Clients</a>
         <a href="#contact">Contact</a>
       </div>
