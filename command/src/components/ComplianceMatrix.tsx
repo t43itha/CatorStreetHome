@@ -1,11 +1,15 @@
 import { Fragment } from "react";
-import type { ComplianceItem } from "@/lib/demo.ts";
+import type { ComplianceItem } from "@/lib/model.ts";
 import { addDays, diffCalendarDays, status, STATUS_LABEL, type Status } from "@/lib/status.ts";
 import { Icon } from "./Icons.tsx";
 
 // Property compliance matrix (plan §4 Screen 3). Every pill comes from status(); nothing is hard-coded.
 
 const REMIND_BEFORE_DAYS = 14;
+const MATRIX_ACTIONS: Record<Status, string[]> = {
+  overdue: ["Draft", "Renewed"], urgent: ["Draft", "Renewed"], soon: ["Remind"], early: ["Remind"],
+  current: ["History"], done: [], missing: ["Add"], na: ["Edit"],
+};
 const DATED: Status[] = ["overdue", "urgent", "soon", "early"];
 
 function longDate(iso: string) {
@@ -64,7 +68,7 @@ export function ComplianceRows({ rows, today }: { rows: ComplianceItem[]; today:
                 <td className="num" style={remindPast ? { color: "var(--overdue)", fontWeight: 600 } : remind ? undefined : mute}>{remind ? longDate(remind) : "—"}</td>
                 <td>{m.file ? <a className="file"><Icon name="onedrive" style={{ width: 14 }} />{m.file}</a> : <span className="file none">{s === "missing" ? "Add link" : "—"}</span>}</td>
                 <td className="resp">{m.owner}</td>
-                <td><div className="row-acts">{(m.actions ?? r.actions).map((a) => <button key={a} className="btn btn-ghost btn-sm" disabled title="Actions arrive with the Convex data">{a}</button>)}</div></td>
+                <td><div className="row-acts">{MATRIX_ACTIONS[s].map((a) => <button key={a} className="btn btn-ghost btn-sm" disabled title="Actions arrive with the Convex data">{a}</button>)}</div></td>
               </tr>
             );
           })}

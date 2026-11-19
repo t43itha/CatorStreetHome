@@ -1,4 +1,4 @@
-import type { IconName } from "@/lib/demo.ts";
+import type { IconName } from "@/lib/model.ts";
 
 /** SVG sprite from the approved mockup. Render once in the layout. */
 export function IconSprite() {

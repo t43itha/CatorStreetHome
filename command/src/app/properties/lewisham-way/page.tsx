@@ -2,7 +2,8 @@ import Link from "next/link";
 import { Icon } from "@/components/Icons.tsx";
 import { Shell } from "@/components/Shell.tsx";
 import { ComplianceRows, ComplianceScore } from "@/components/ComplianceMatrix.tsx";
-import { buildDemo, LEWISHAM } from "@/lib/demo.ts";
+import { getCommandData } from "@/lib/data.ts";
+import { DEMO_PROPERTY } from "@/lib/seedData.ts";
 import { todayLondon } from "@/lib/status.ts";
 import { connection } from "next/server";
 
@@ -10,7 +11,7 @@ import { connection } from "next/server";
 export default async function PropertyPage() {
   await connection();
   const today = todayLondon();
-  const rows = buildDemo(today).compliance.filter((o) => o.where === LEWISHAM && o.matrix);
+  const rows = (await getCommandData(today)).compliance.filter((o) => o.where === DEMO_PROPERTY.lewishamLabel && o.matrix);
   return (
     <Shell active="properties">
       <div className="crumbs"><Link href="/clients/okafor">Clients</Link><span>/</span><Link href="/clients/okafor">Margaret Okafor</Link><span>/</span><span>Flat 3, 22 Lewisham Way</span></div>

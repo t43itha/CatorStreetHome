@@ -1,5 +1,5 @@
 // Home view model (plan §4 Screen 1). Pure: data + London date in, everything the page renders out.
-import type { buildDemo, Commitment, IconName } from "./demo.ts";
+import type { CommandData, Commitment, IconName } from "./model.ts";
 import { diffCalendarDays, formatDue, formatShortDate, isUrgent, plural, status, STATUS_LABEL, type Status } from "./status.ts";
 
 export type Tone = "red" | "orange" | "amber" | "blue" | "grey" | "green" | "mute";
@@ -24,8 +24,8 @@ export interface HomeView {
   kpis: Array<{ label: string; icon: IconName; accent: string; num: number; meta: string }>;
   upcoming: Array<{ label: string; rows: UpcomingRow[] }>;
   accountability: Array<{ label: string; initials: string; style: { background: string; color: string }; count: number; note: string; late: boolean; bar: string }>;
-  meetings: ReturnType<typeof buildDemo>["meetings"];
-  drafts: ReturnType<typeof buildDemo>["drafts"];
+  meetings: CommandData["meetings"];
+  drafts: CommandData["drafts"];
   overdueCount: number;
 }
 
@@ -36,13 +36,17 @@ const toneOf = (s: Status): Tone =>
 
 const sinceChased = (c: Commitment, today: string) => (c.lastChasedAt ? diffCalendarDays(today, c.lastChasedAt) : 0);
 
-export function buildHome(data: ReturnType<typeof buildDemo>, today: string): HomeView {
+export function buildHome(data: CommandData, today: string): HomeView {
   const { compliance, commitments, emails, milestones, meetings, drafts } = data;
   const daysTo = (iso: string) => diffCalendarDays(iso, today);
 
   // Urgent now: compliance (one rule: isUrgent), late promises, stalled external items, emails needing reply.
+  // Most overdue first; items with no date recorded after the dated ones.
+  const byDue = (a: { dueDate?: string }, b: { dueDate?: string }) =>
+    a.dueDate && b.dueDate ? a.dueDate.localeCompare(b.dueDate) : a.dueDate ? -1 : b.dueDate ? 1 : 0;
   const urgentCompliance: HomeRow[] = compliance
     .filter((o) => isUrgent(o, today, o))
+    .sort(byDue)
     .map((o) => {
       const s = status(o, today);
       return {

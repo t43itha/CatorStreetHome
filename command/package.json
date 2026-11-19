@@ -6,10 +6,13 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "convex": "CONVEX_AGENT_MODE=anonymous convex dev",
+    "seed": "convex run seed:reset",
     "test": "node --test src/lib/*.test.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit && tsc --noEmit -p convex"
   },
   "dependencies": {
+    "convex": "^1.51.0",
     "next": "^16.4.6",
     "react": "^19.3.1",
     "react-dom": "^19.3.1"

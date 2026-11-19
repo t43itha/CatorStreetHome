@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { connection } from "next/server";
-import { buildDemo, type IconName } from "@/lib/demo.ts";
+import { getCommandData } from "@/lib/data.ts";
+import type { IconName } from "@/lib/model.ts";
 import { buildHome } from "@/lib/home.ts";
 import { todayLondon } from "@/lib/status.ts";
 import { Icon } from "./Icons.tsx";
@@ -25,7 +26,7 @@ const LATER: Array<{ label: string; icon: IconName; step: string }> = [
 export async function Shell({ active, children }: { active: NavKey; children: React.ReactNode }) {
   await connection();
   const today = todayLondon();
-  const urgentCount = buildHome(buildDemo(today), today).urgent.length;
+  const urgentCount = buildHome(await getCommandData(today), today).urgent.length;
 
   return (
     <div className="app">
