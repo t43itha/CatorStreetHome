@@ -1,8 +1,9 @@
 import Link from "next/link";
+import { connection } from "next/server";
 import { ComingUp } from "@/components/ComingUp.tsx";
 import { Icon } from "@/components/Icons.tsx";
 import { Shell } from "@/components/Shell.tsx";
-import { buildDemo } from "@/lib/demo.ts";
+import { getCommandData } from "@/lib/data.ts";
 import { buildHome } from "@/lib/home.ts";
 import { plural, todayLondon } from "@/lib/status.ts";
 
@@ -20,10 +21,11 @@ function londonHeader(now: Date) {
   };
 }
 
-export default function HomePage() {
+export default async function HomePage() {
+  await connection();
   const now = new Date();
   const today = todayLondon(now);
-  const view = buildHome(buildDemo(today), today);
+  const view = buildHome(await getCommandData(today), today);
   const { date, greeting } = londonHeader(now);
   const n = view.urgent.length;
 
