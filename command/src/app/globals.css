@@ -355,3 +355,27 @@
   }
   .scroll-x{overflow-x:auto;}
   .seg3 button{white-space:nowrap;}
+  /* dialogs and forms (not in the mockup; built from its tokens) */
+  .dlg{border:1px solid var(--line);border-radius:var(--r);padding:0;width:min(520px,calc(100vw - 32px));background:var(--card);color:var(--ink);box-shadow:0 20px 50px rgba(19,41,75,.18);}
+  .dlg::backdrop{background:rgba(14,31,58,.35);}
+  .dlg-head{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--line-soft);}
+  .dlg-body{padding:16px 20px 20px;display:flex;flex-direction:column;gap:12px;}
+  .form-row{display:flex;flex-direction:column;gap:4px;}
+  .form-row label{font-size:11.5px;color:var(--ink-mute);font-weight:500;display:flex;flex-direction:column;gap:4px;}
+  .form-row input,.form-row select,.form-row textarea{font:inherit;font-size:13.5px;border:1px solid var(--line);border-radius:7px;padding:8px 10px;background:var(--card);color:var(--ink);}
+  .form-row textarea{min-height:120px;resize:vertical;}
+  .form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
+  .form-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:4px;}
+  .form-error{font-size:12.5px;color:var(--overdue);}
+  .empty{padding:18px 20px;color:var(--ink-mute);font-size:13px;border-top:1px solid var(--line-soft);}
+  .palette-list{max-height:360px;overflow:auto;margin:0 -20px -20px;}
+  .palette-item{display:flex;gap:10px;align-items:center;padding:10px 20px;border-top:1px solid var(--line-soft);}
+  .palette-item:hover,.palette-item:focus{background:#FCFAF6;outline:none;}
+  .palette-item .k{font-size:11px;color:var(--ink-mute);width:78px;flex:0 0 auto;}
+  a.row:hover .t{color:var(--green);}
+  .search{cursor:pointer;border:1px solid var(--line);text-align:left;font:inherit;}
+  @media (max-width:760px){ .form-grid{grid-template-columns:minmax(0,1fr);} }
+  .matrix .dn{white-space:normal;}
+  .matrix .row-acts{flex-wrap:wrap;}
+  .matrix td:last-child{min-width:96px;}
+  .matrix th:first-child{width:auto;}

@@ -12,6 +12,9 @@ export type MatrixGroup = "Statutory · recurring" | "Tenancy · event-driven" |
 // ---- Screen-facing shape ----
 
 export interface ComplianceItem {
+  id: string;
+  clientId: string;
+  templateCode: string;
   label: string;
   icon: IconName;
   scope: "client" | "property" | "tenancy";
@@ -28,6 +31,7 @@ export interface ComplianceItem {
 }
 
 export interface Commitment {
+  id: string;
   title: string;
   context: string;
   owner: "you" | "landlord" | "contractor" | "tenant";
@@ -35,10 +39,10 @@ export interface Commitment {
   lastChasedAt?: string;
 }
 
-export interface LoggedEmail { subject: string; context: string; loggedOn: string }
+export interface LoggedEmail { id: string; subject: string; context: string; loggedOn: string }
 export interface Milestone { label: string; context: string; date: string; tag: "Visit" | "Tenancy"; icon: IconName }
-export interface Meeting { time: string; title: string; context: string; teams?: string }
-export interface Draft { title: string; to: string; tone: "overdue" | "urgent" | "soon" }
+export interface Meeting { id: string; time: string; title: string; context: string; teams?: string }
+export interface Draft { id: string; title: string; to: string; tone: "overdue" | "urgent" | "soon" }
 
 export interface CommandData {
   compliance: ComplianceItem[];
@@ -52,20 +56,20 @@ export interface CommandData {
 // ---- Stored rows (structurally compatible with Convex documents) ----
 
 export interface Rows {
-  clients: Array<{ _id: string; name: string; status: "onboarding" | "active" | "prospect" | "former"; serviceTier: string; isOverseas: boolean }>;
-  properties: Array<{ _id: string; clientId: string; addressLine1: string; postcode: string }>;
-  tenancies: Array<{ _id: string; propertyId: string; status: "active" | "ended"; startDate: string; noticeGivenBy?: "tenant" | "landlord"; expectedEndDate?: string }>;
+  clients: Array<{ _id: string; name: string; status: "onboarding" | "active" | "prospect" | "former"; serviceTier: string; isOverseas: boolean; email?: string; phone?: string }>;
+  properties: Array<{ _id: string; clientId: string; addressLine1: string; postcode: string; hasGas?: boolean; licenceType?: "none" | "selective" | "additional" | "hmo"; status?: "onboarding" | "active" | "former" }>;
+  tenancies: Array<{ _id: string; propertyId: string; status: "active" | "ended"; startDate: string; tenants?: Array<{ name: string; email?: string }>; rentGbp?: number; depositAmountGbp?: number; depositReceivedDate?: string; depositScheme?: string; noticeGivenBy?: "tenant" | "landlord"; expectedEndDate?: string }>;
   requirementTemplates: Array<{ code: string; name: string; scope: "client" | "property" | "tenancy"; kind: "renewal" | "event" | "remedial" | "follow_up" | "schedule"; isStatutory: boolean; group: MatrixGroup; icon: string }>;
   obligations: Array<{ _id: string; templateCode: string; clientId: string; propertyId?: string; tenancyId?: string; dueDate?: string; satisfiedAt?: string; isNotApplicable: boolean; naReason?: string; responsibility: "CSPS" | "Landlord"; note?: string }>;
   evidence: Array<{ obligationId: string; oneDriveFileName?: string; recordedAt: number }>;
-  reminders: Array<{ obligationId: string; stage: "30d" | "14d" | "7d" | "overdue" | "missing"; status: string; to: string; subject: string }>;
-  commitments: Array<{ title: string; details?: string; ownerType: Commitment["owner"]; dueDate?: string; lastChasedAt?: string; status: "open" | "waiting" | "done" }>;
-  meetings: Array<{ title: string; scheduledAt: string; context: string; teamsLabel?: string }>;
-  emails: Array<{ subject: string; snippet: string; status: string; occurredAt: string }>;
+  reminders: Array<{ _id: string; obligationId?: string; stage: "30d" | "14d" | "7d" | "overdue" | "missing" | "onboarding_request"; status: string; to: string; subject: string; body?: string }>;
+  commitments: Array<{ _id: string; title: string; details?: string; clientId?: string; propertyId?: string; ownerType: Commitment["owner"]; dueDate?: string; lastChasedAt?: string; status: "open" | "waiting" | "done" }>;
+  meetings: Array<{ _id: string; title: string; scheduledAt: string; clientId?: string; notes?: string; decisions?: string[]; context: string; teamsLabel?: string }>;
+  emails: Array<{ _id: string; subject: string; snippet: string; status: string; occurredAt: string }>;
 }
 
 const DRAFT_STATUSES = new Set(["reserved", "pushing", "in_outlook_drafts", "needs_attention"]);
-const TONE: Record<Rows["reminders"][number]["stage"], Draft["tone"]> = { overdue: "overdue", "7d": "urgent", "14d": "soon", "30d": "soon", missing: "overdue" };
+const TONE: Record<Rows["reminders"][number]["stage"], Draft["tone"]> = { overdue: "overdue", "7d": "urgent", "14d": "soon", "30d": "soon", missing: "overdue", onboarding_request: "soon" };
 
 function homeActions(s: ReturnType<typeof status>): string[] {
   if (s === "overdue" || s === "urgent") return ["Draft email", "Record evidence"];
@@ -94,6 +98,9 @@ export function toCommandData(rows: Rows, today: string): CommandData {
     const p = o.propertyId ? property.get(o.propertyId) : undefined;
     const s = status(o, today);
     return {
+      id: o._id,
+      clientId: o.clientId,
+      templateCode: o.templateCode,
       label: t.name,
       icon: t.icon as IconName,
       scope: t.scope,
@@ -118,11 +125,11 @@ export function toCommandData(rows: Rows, today: string): CommandData {
 
   const commitments: Commitment[] = rows.commitments
     .filter((c) => c.status !== "done")
-    .map((c) => ({ title: c.title, context: c.details ?? "", owner: c.ownerType, dueDate: c.dueDate, lastChasedAt: c.lastChasedAt }));
+    .map((c) => ({ id: c._id, title: c.title, context: c.details ?? "", owner: c.ownerType, dueDate: c.dueDate, lastChasedAt: c.lastChasedAt }));
 
   const emails: LoggedEmail[] = rows.emails
     .filter((e) => e.status === "needs_reply")
-    .map((e) => ({ subject: e.subject, context: e.snippet, loggedOn: e.occurredAt }));
+    .map((e) => ({ id: e._id, subject: e.subject, context: e.snippet, loggedOn: e.occurredAt }));
 
   const milestones: Milestone[] = rows.tenancies
     .filter((t) => t.status === "active" && t.expectedEndDate)
@@ -137,11 +144,11 @@ export function toCommandData(rows: Rows, today: string): CommandData {
   const meetings: Meeting[] = rows.meetings
     .filter((m) => m.scheduledAt.startsWith(today))
     .sort((a, b) => a.scheduledAt.localeCompare(b.scheduledAt))
-    .map((m) => ({ time: m.scheduledAt.slice(11, 16), title: m.title, context: m.context, teams: m.teamsLabel }));
+    .map((m) => ({ id: m._id, time: m.scheduledAt.slice(11, 16), title: m.title, context: m.context, teams: m.teamsLabel }));
 
   const drafts: Draft[] = rows.reminders
     .filter((r) => DRAFT_STATUSES.has(r.status))
-    .map((r) => ({ title: r.subject, to: r.to, tone: TONE[r.stage] }));
+    .map((r) => ({ id: r._id, title: r.subject, to: r.to, tone: TONE[r.stage] }));
 
   return { compliance, commitments, emails, milestones, meetings, drafts };
 }

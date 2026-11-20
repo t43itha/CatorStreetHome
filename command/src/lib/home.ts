@@ -5,6 +5,7 @@ import { diffCalendarDays, formatDue, formatShortDate, isUrgent, plural, status,
 export type Tone = "red" | "orange" | "amber" | "blue" | "grey" | "green" | "mute";
 
 export interface HomeRow {
+  ref?: { kind: "obligation" | "commitment" | "email"; id: string; templateCode?: string };
   icon: IconName;
   tone: Tone;
   title: string;
@@ -50,6 +51,7 @@ export function buildHome(data: CommandData, today: string): HomeView {
     .map((o) => {
       const s = status(o, today);
       return {
+        ref: { kind: "obligation", id: o.id, templateCode: o.templateCode },
         icon: o.icon, tone: toneOf(s), title: o.label, sub: `${o.where} · ${o.landlord}`, actions: o.actions,
         when: o.dueDate ? formatDue(daysTo(o.dueDate)) : "no date recorded", whenTone: toneOf(s),
       };
@@ -57,15 +59,15 @@ export function buildHome(data: CommandData, today: string): HomeView {
 
   const latePromises: HomeRow[] = commitments
     .filter((c) => c.owner === "you" && c.dueDate && daysTo(c.dueDate) < 0)
-    .map((c) => ({ icon: "list", tone: "red", title: c.title, sub: c.context, actions: ["Done"], when: `${plural(-daysTo(c.dueDate!), "day")} late`, whenTone: "red" }));
+    .map((c) => ({ ref: { kind: "commitment", id: c.id }, icon: "list", tone: "red", title: c.title, sub: c.context, actions: ["Done"], when: `${plural(-daysTo(c.dueDate!), "day")} late`, whenTone: "red" }));
 
   const stalled: HomeRow[] = commitments
     .filter((c) => c.owner !== "you" && sinceChased(c, today) > STALLED_DAYS)
-    .map((c) => ({ icon: "clock", tone: "amber", title: c.title, sub: `${c.context} · last chased ${formatShortDate(c.lastChasedAt!)}`, actions: ["Log chase"], when: `${plural(sinceChased(c, today), "day")} silent`, whenTone: "red" }));
+    .map((c) => ({ ref: { kind: "commitment", id: c.id }, icon: "clock", tone: "amber", title: c.title, sub: `${c.context} · last chased ${formatShortDate(c.lastChasedAt!)}`, actions: ["Log chase"], when: `${plural(sinceChased(c, today), "day")} silent`, whenTone: "red" }));
 
   const needsReply: HomeRow[] = emails
     .filter((e) => diffCalendarDays(today, e.loggedOn) >= 1)
-    .map((e) => ({ icon: "mail", tone: "amber", title: e.subject, sub: `${e.context} · logged ${formatShortDate(e.loggedOn)}`, actions: ["Turn into action"], when: plural(diffCalendarDays(today, e.loggedOn), "day"), whenTone: "amber" }));
+    .map((e) => ({ ref: { kind: "email", id: e.id }, icon: "mail", tone: "amber", title: e.subject, sub: `${e.context} · logged ${formatShortDate(e.loggedOn)}`, actions: ["Turn into action"], when: plural(diffCalendarDays(today, e.loggedOn), "day"), whenTone: "amber" }));
 
   const urgent = [...urgentCompliance, ...latePromises, ...stalled, ...needsReply];
 
