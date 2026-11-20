@@ -1,56 +1,90 @@
-import { Icon } from "@/components/Icons.tsx";
+import Link from "next/link";
 import { Shell } from "@/components/Shell.tsx";
+import { Icon } from "@/components/Icons.tsx";
+import { Act } from "@/components/Act.tsx";
 import { ActionsTabs } from "@/components/ActionsTabs.tsx";
+import { NewAction } from "@/components/forms.tsx";
+import { api, read } from "@/lib/data.ts";
+import { diffCalendarDays, formatShortDate, todayLondon } from "@/lib/status.ts";
 
-// Ported from the approved mockup. Demo content; real data arrives with Convex (plan Step 1.2).
-export default function ActionsPage() {
+type A = Awaited<ReturnType<typeof read<typeof api.views.actions>>>[number];
+const OWNER = { you: { label: "You (CSPS)", bg: "var(--navy)", i: "TO" }, landlord: { label: "Landlords", bg: "#5A6E96", i: "LL" }, contractor: { label: "Contractors", bg: "#A15C07", i: "CT" }, tenant: { label: "Tenants", bg: "#5B8C66", i: "TN" } } as const;
+const SOURCE_ICON = { meeting: "cal", email: "mail", compliance: "shield", manual: "list" } as const;
+const STALLED = 5;
+
+function Task({ a, today }: { a: A; today: string }) {
+  const days = a.dueDate ? diffCalendarDays(a.dueDate, today) : undefined;
+  const done = a.status === "done";
+  return (
+    <div className="task" style={done ? { opacity: 0.7 } : undefined}>
+      <div className="t" style={done ? { textDecoration: "line-through", textDecorationColor: "var(--ink-mute)" } : undefined}>{a.title}</div>
+      {!done && <div className="ctx">{a.clientName ?? a.details ?? ""}</div>}
+      <div className="f">
+        <span className="src"><Icon name={SOURCE_ICON[a.sourceType ?? "manual"]} />{done ? formatShortDate(a.completedAt ?? today) : (a.sourceType ?? "manual")[0].toUpperCase() + (a.sourceType ?? "manual").slice(1)}</span>
+        {!done && <span className="due" style={{ color: days !== undefined && days < 0 ? "var(--overdue)" : days !== undefined && days <= 2 ? "var(--urgent)" : undefined }}>{days === undefined ? "" : days < 0 ? `${-days}d late` : formatShortDate(a.dueDate!)}</span>}
+        <span className="owner" style={{ background: OWNER[a.ownerType].bg }} title={OWNER[a.ownerType].label}>{OWNER[a.ownerType].i}</span>
+      </div>
+      {!done && <div className="f">{a.ownerType === "you"
+        ? <Act fn="commitments:complete" args={{ id: a.id }} label="Done" done="Action marked done" />
+        : <Act fn="commitments:logChase" args={{ id: a.id }} label="Log chase" done="Chase logged" />}</div>}
+    </div>
+  );
+}
+
+function Column({ title, items, today, colour, bg }: { title: string; items: A[]; today: string; colour?: string; bg?: string }) {
+  return (
+    <div className="col" style={bg ? { background: bg } : undefined}>
+      <div className="col-h"><span style={colour ? { color: colour } : undefined}>{title}</span><span className="c">{items.length}</span></div>
+      {items.map((a) => <Task key={a.id} a={a} today={today} />)}
+    </div>
+  );
+}
+
+export default async function ActionsPage() {
+  const today = todayLondon();
+  const all = await read(api.views.actions, {});
+  const open = all.filter((a) => a.status !== "done");
+  const due = (a: A) => (a.dueDate ? diffCalendarDays(a.dueDate, today) : Infinity);
+  const silent = (a: A) => (a.lastChasedAt ? diffCalendarDays(today, a.lastChasedAt) : 0);
+  const waiting = open.filter((a) => a.ownerType !== "you").sort((a, b) => silent(b) - silent(a));
+  const doneThisWeek = all.filter((a) => a.status === "done" && a.completedAt && diffCalendarDays(today, a.completedAt) <= 7);
+
   return (
     <Shell active="actions">
       <div className="page-head">
         <div><span className="eyebrow">Follow-through</span><h1 className="page">Actions</h1><p className="lede">Everything promised in meetings, emails and compliance checks — with one owner and one date.</p></div>
-        <button className="btn btn-primary" disabled><Icon name="plus" />New action</button>
+        <NewAction text={<><Icon name="plus" />New action</>} />
       </div>
       <ActionsTabs
+        counts={{ open: open.length, waiting: waiting.length }}
         board={<>
-        <div className="col">
-          <div className="col-h"><span style={{ color: "var(--overdue)" }}>Overdue</span><span className="c">3</span></div>
-          <div className="task"><div className="t">Send revised management agreement</div><div className="ctx">Margaret Okafor</div><div className="f"><span className="src"><Icon name="cal" />Teams · 12 Nov</span><span className="due" style={{ color: "var(--overdue)" }}>4d late</span><span className="owner" style={{ background: "var(--navy)" }}>TO</span></div></div>
-          <div className="task"><div className="t">Chase Kent Heating for boiler quote</div><div className="ctx">7 Rochester Road · Shah</div><div className="f"><span className="src"><Icon name="mail" />Email · 6 Nov</span><span className="due" style={{ color: "var(--overdue)" }}>2d late</span><span className="owner" style={{ background: "#A15C07" }}>KH</span></div></div>
-          <div className="task"><div className="t">Renew CP12 — book Southern Gas</div><div className="ctx">7 Rochester Road · Shah</div><div className="f"><span className="src"><Icon name="shield" />Compliance</span><span className="due" style={{ color: "var(--overdue)" }}>3d late</span><span className="owner" style={{ background: "var(--navy)" }}>TO</span></div></div>
-        </div>
-        <div className="col">
-          <div className="col-h"><span>This week</span><span className="c">5</span></div>
-          <div className="task"><div className="t">Book EICR — get 3 quotes</div><div className="ctx">Flat 3, 22 Lewisham Way</div><div className="f"><span className="src"><Icon name="shield" />Compliance</span><span className="due" style={{ color: "var(--urgent)" }}>Fri 21</span><span className="owner" style={{ background: "var(--navy)" }}>TO</span></div></div>
-          <div className="task"><div className="t">Send James updated rent statement</div><div className="ctx">James Whitfield</div><div className="f"><span className="src"><Icon name="cal" />Teams · today</span><span className="due">Fri 21</span><span className="owner" style={{ background: "var(--navy)" }}>TO</span></div></div>
-          <div className="task"><div className="t">Reply to Chloe re: bathroom damp</div><div className="ctx">9 Blackheath Park</div><div className="f"><span className="src"><Icon name="mail" />Email · 17 Nov</span><span className="due">Fri 21</span><span className="owner" style={{ background: "var(--navy)" }}>TO</span></div></div>
-          <div className="task"><div className="t">Approve extractor fan (£420)</div><div className="ctx">Flat 3 · Margaret Okafor</div><div className="f"><span className="src"><Icon name="chat" />WhatsApp</span><span className="due">Sat 22</span><span className="owner" style={{ background: "#5A6E96" }}>MO</span></div></div>
-        </div>
-        <div className="col">
-          <div className="col-h"><span>Next 30 days</span><span className="c">6</span></div>
-          <div className="task"><div className="t">Request new RTR share code</div><div className="ctx">41 Maidstone Road · tenant</div><div className="f"><span className="src"><Icon name="shield" />Compliance</span><span className="due">25 Nov</span><span className="owner" style={{ background: "#5B8C66" }}>TN</span></div></div>
-          <div className="task"><div className="t">Photos &amp; listing — Wricklemarsh Rd</div><div className="ctx">Margaret Okafor</div><div className="f"><span className="src"><Icon name="list" />Manual</span><span className="due">29 Nov</span><span className="owner" style={{ background: "var(--navy)" }}>TO</span></div></div>
-          <div className="task"><div className="t">Insurance renewal proof</div><div className="ctx">41 Maidstone Road · James</div><div className="f"><span className="src"><Icon name="shield" />Compliance</span><span className="due">13 Dec</span><span className="owner" style={{ background: "#5A6E96" }}>JW</span></div></div>
-        </div>
-        <div className="col" style={{ background: "#EEF3EF" }}>
-          <div className="col-h"><span style={{ color: "var(--green)" }}>Done this week</span><span className="c">8</span></div>
-          <div className="task" style={{ opacity: ".7" }}><div className="t" style={{ textDecoration: "line-through", textDecorationColor: "var(--ink-mute)" }}>Serve section 13 notice — Shah</div><div className="f"><span className="src"><Icon name="check" />18 Nov</span><span className="owner" style={{ background: "var(--navy)" }}>TO</span></div></div>
-          <div className="task" style={{ opacity: ".7" }}><div className="t" style={{ textDecoration: "line-through", textDecorationColor: "var(--ink-mute)" }}>Upload CP12 — Wricklemarsh Rd</div><div className="f"><span className="src"><Icon name="check" />17 Nov</span><span className="owner" style={{ background: "var(--navy)" }}>TO</span></div></div>
-        </div>
+          <Column title="Overdue" colour="var(--overdue)" items={open.filter((a) => due(a) < 0)} today={today} />
+          <Column title="This week" items={open.filter((a) => due(a) >= 0 && due(a) <= 7)} today={today} />
+          <Column title="Later / no date" items={open.filter((a) => due(a) > 7).sort((a, b) => due(a) - due(b))} today={today} />
+          <Column title="Done this week" colour="var(--green)" bg="#EEF3EF" items={doneThisWeek} today={today} />
         </>}
-        waiting={<div className="scroll-x">
-        <table className="wtable">
-          <thead><tr><th>Waiting for</th><th>From</th><th>Property / client</th><th>Silent for</th><th>Last chase</th><th></th></tr></thead>
+        waiting={<div className="scroll-x"><table className="wtable">
+          <thead><tr><th>Waiting for</th><th>From</th><th>Client</th><th>Silent for</th><th>Last chase</th><th></th></tr></thead>
           <tbody>
-            <tr><td><b>Boiler replacement quote</b></td><td>Kent Heating Ltd <span className="tag" style={{ marginLeft: "4px" }}>Contractor</span></td><td>7 Rochester Road · Shah</td><td><div className="stale"><div className="bar"><span style={{ width: "100%", background: "var(--overdue)" }}></span></div><b style={{ color: "var(--overdue)" }}>6 days</b></div></td><td className="lc">13 Nov · phone</td><td><button className="btn btn-ghost btn-sm chase" disabled>Log chase</button></td></tr>
-            <tr><td><b>Approval for extractor fan (£420)</b></td><td>Margaret Okafor <span className="tag" style={{ marginLeft: "4px" }}>Landlord</span></td><td>Flat 3, 22 Lewisham Way</td><td><div className="stale"><div className="bar"><span style={{ width: "40%", background: "var(--soon)" }}></span></div><b style={{ color: "var(--soon)" }}>2 days</b></div></td><td className="lc">17 Nov · WhatsApp</td><td><button className="btn btn-ghost btn-sm chase" disabled>Log chase</button></td></tr>
-            <tr><td><b>New Right to Rent share code</b></td><td>Daniel Osei <span className="tag" style={{ marginLeft: "4px" }}>Tenant</span></td><td>41 Maidstone Road · Whitfield</td><td><div className="stale"><div className="bar"><span style={{ width: "20%", background: "var(--early)" }}></span></div><b>1 day</b></div></td><td className="lc">18 Nov · email</td><td><button className="btn btn-ghost btn-sm chase" disabled>Log chase</button></td></tr>
-            <tr><td><b>Signed renewal for buildings insurance</b></td><td>James Whitfield <span className="tag" style={{ marginLeft: "4px" }}>Landlord</span></td><td>41 Maidstone Road</td><td><div className="stale"><div className="bar"><span style={{ width: "10%", background: "var(--early)" }}></span></div><b>Today</b></div></td><td className="lc">—</td><td><button className="btn btn-ghost btn-sm chase" disabled>Log chase</button></td></tr>
-            <tr><td><b>Licence application acknowledgement</b></td><td>Medway Council <span className="tag" style={{ marginLeft: "4px" }}>Council</span></td><td>7 Rochester Road · Shah</td><td><div className="stale"><div className="bar"><span style={{ width: "85%", background: "var(--overdue)" }}></span></div><b style={{ color: "var(--overdue)" }}>11 days</b></div></td><td className="lc">8 Nov · portal</td><td><button className="btn btn-ghost btn-sm chase" disabled>Log chase</button></td></tr>
+            {waiting.length === 0 && <tr><td colSpan={6} style={{ color: "var(--ink-mute)" }}>Nobody owes you anything.</td></tr>}
+            {waiting.map((a) => {
+              const s = silent(a);
+              const colour = s > STALLED ? "var(--overdue)" : s >= 2 ? "var(--soon)" : "var(--early)";
+              return (
+                <tr key={a.id}>
+                  <td><b>{a.title}</b></td>
+                  <td>{a.waitingOn ?? OWNER[a.ownerType].label} <span className="tag" style={{ marginLeft: 4 }}>{a.ownerType[0].toUpperCase() + a.ownerType.slice(1)}</span></td>
+                  <td>{a.clientId ? <Link href={`/clients/${a.clientId}`}>{a.clientName}</Link> : a.details ?? "—"}</td>
+                  <td><div className="stale"><div className="bar"><span style={{ width: `${Math.min(100, s * 10)}%`, background: colour }} /></div><b style={{ color: s > STALLED ? "var(--overdue)" : undefined }}>{s === 0 ? "Today" : `${s} day${s === 1 ? "" : "s"}`}</b></div></td>
+                  <td>{a.lastChasedAt ? formatShortDate(a.lastChasedAt) : "—"}</td>
+                  <td><Act fn="commitments:logChase" args={{ id: a.id }} label="Log chase" done="Chase logged · timer reset" /></td>
+                </tr>
+              );
+            })}
           </tbody>
-        </table>
-        </div>}
+        </table></div>}
+        owner={<>{(Object.keys(OWNER) as Array<keyof typeof OWNER>).map((k) => <Column key={k} title={OWNER[k].label} items={open.filter((a) => a.ownerType === k)} today={today} />)}</>}
       />
-
     </Shell>
   );
 }

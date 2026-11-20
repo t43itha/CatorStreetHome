@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Hanken_Grotesk, Newsreader } from "next/font/google";
 import { IconSprite } from "@/components/Icons.tsx";
+import { ConvexClientProvider } from "@/components/ConvexClientProvider.tsx";
 import "./globals.css";
 
 const newsreader = Newsreader({ subsets: ["latin"], style: ["normal", "italic"], axes: ["opsz"], variable: "--font-newsreader" });
@@ -16,7 +17,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en-GB" className={`${newsreader.variable} ${hanken.variable}`}>
       <body>
         <IconSprite />
-        {children}
+        <ConvexClientProvider>{children}</ConvexClientProvider>
       </body>
     </html>
   );
