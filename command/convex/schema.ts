@@ -1,4 +1,4 @@
-// Convex schema (plan §6). users and graphConnectStates arrive with Step 1.1b and Phase 2.
+// Convex schema (plan §6). graphConnectStates arrives with Phase 2.
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 
@@ -163,6 +163,17 @@ export default defineSchema({
     result: v.optional(v.string()),
   }).index("by_job_date", ["job", "londonDate"]),
 
+  users: defineTable({
+    tokenIdentifier: v.optional(v.string()),
+    entraObjectId: v.optional(v.string()),
+    email: v.string(),
+    name: v.optional(v.string()),
+    role: v.union(v.literal("owner"), v.literal("staff")),
+    status: v.union(v.literal("invited"), v.literal("active"), v.literal("disabled")),
+    invitedAt: v.number(),
+    lastSeenAt: v.optional(v.number()),
+  }).index("by_token", ["tokenIdentifier"]).index("by_email", ["email"]).index("by_status", ["status"]),
+
   activityLogs: defineTable({
     entityType: v.string(),
     entityId: v.string(),
@@ -170,6 +181,8 @@ export default defineSchema({
     propertyId: v.optional(v.id("properties")),
     action: v.string(),
     summary: v.string(),
+    actorUserId: v.optional(v.string()),
+    actorName: v.optional(v.string()),
     createdAt: v.number(),
     isDemo: v.boolean(),
   }).index("by_client", ["clientId"]).index("by_property", ["propertyId"]).index("by_created_at", ["createdAt"]),

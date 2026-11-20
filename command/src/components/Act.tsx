@@ -2,6 +2,7 @@
 
 import { useMutation } from "convex/react";
 import { makeFunctionReference } from "convex/server";
+import { ConvexError } from "convex/values";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useToast } from "./ConvexClientProvider.tsx";
@@ -20,7 +21,7 @@ export function useAct(name: string) {
       router.refresh();
       return result;
     } catch (e) {
-      toast(e instanceof Error ? e.message.replace(/^.*Uncaught Error: /s, "").split("\n")[0] : "Something went wrong");
+      toast(e instanceof ConvexError ? String(e.data) : "Something went wrong. Try again.");
       throw e;
     } finally {
       setBusy(false);

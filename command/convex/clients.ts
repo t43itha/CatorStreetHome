@@ -1,6 +1,5 @@
-// NOTE: unguarded until Step 1.1b. Local only.
-import { v } from "convex/values";
-import { mutation, query } from "./_generated/server";
+import { ConvexError, v } from "convex/values";
+import { userMutation, userQuery } from "./lib/functions";
 import type { MutationCtx, QueryCtx } from "./_generated/server";
 import { insertObligations, logActivity, today } from "./model";
 import { clientObligations } from "../src/lib/templates.ts";
@@ -16,7 +15,7 @@ export async function possibleDuplicates(ctx: QueryCtx, q: { email?: string; pho
   });
 }
 
-export const findPossibleDuplicates = query({
+export const findPossibleDuplicates = userQuery({
   args: { email: v.optional(v.string()), phone: v.optional(v.string()), name: v.string() },
   handler: (ctx, q) => possibleDuplicates(ctx, q),
 });
@@ -27,7 +26,7 @@ export const clientInput = {
 };
 
 export async function createClient(ctx: MutationCtx, a: { name: string; serviceTier: string; isOverseas: boolean; email?: string; phone?: string; clientType?: "individual" | "company"; preferredChannel?: string; repairLimitGbp?: number; oneDriveFolderUrl?: string }) {
-  if (!a.name.trim()) throw new Error("Enter the landlord's name");
+  if (!a.name.trim()) throw new ConvexError("Enter the landlord's name");
   const clientId = await ctx.db.insert("clients", { ...a, name: a.name.trim(), status: "onboarding", onboardingStartedAt: today(), isDemo: false });
   await insertObligations(ctx, { clientId }, clientObligations({ isOverseas: a.isOverseas }));
   await logActivity(ctx, { entityType: "client", entityId: clientId, clientId, action: "created", summary: `Onboarding started for ${a.name.trim()}` });
@@ -35,4 +34,4 @@ export async function createClient(ctx: MutationCtx, a: { name: string; serviceT
 }
 
 /** Creates the client in `onboarding` and its client obligations. */
-export const create = mutation({ args: clientInput, handler: (ctx, a) => createClient(ctx, a) });
+export const create = userMutation({ args: clientInput, handler: (ctx, a) => createClient(ctx, a) });

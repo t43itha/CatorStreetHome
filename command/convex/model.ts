@@ -1,5 +1,6 @@
 // Shared write and read helpers. Every mutation, the importer, onboarding and the seed go through
 // these, so each task has one way to happen (plan Screen 2b "same mutations the rest of the app use").
+import { ConvexError } from "convex/values";
 import type { Doc, Id } from "./_generated/dataModel";
 import type { MutationCtx, QueryCtx } from "./_generated/server";
 import type { Rows } from "../src/lib/model.ts";
@@ -19,8 +20,9 @@ export async function loadRows(ctx: QueryCtx): Promise<Rows> {
   return { clients, properties, tenancies, requirementTemplates, obligations, evidence, reminders, commitments, meetings, emails };
 }
 
-export async function logActivity(ctx: MutationCtx, a: { entityType: string; entityId: string; clientId?: Id<"clients">; propertyId?: Id<"properties">; action: string; summary: string; isDemo?: boolean }) {
-  await ctx.db.insert("activityLogs", { ...a, isDemo: a.isDemo ?? false, createdAt: Date.now() });
+/** The actor always comes from the signed-in user on the server, never from arguments (plan §8.3). */
+export async function logActivity(ctx: MutationCtx & { user?: Doc<"users"> }, a: { entityType: string; entityId: string; clientId?: Id<"clients">; propertyId?: Id<"properties">; action: string; summary: string; isDemo?: boolean }) {
+  await ctx.db.insert("activityLogs", { ...a, actorUserId: ctx.user?._id, actorName: ctx.user?.name ?? ctx.user?.email, isDemo: a.isDemo ?? false, createdAt: Date.now() });
 }
 
 /** Default responsibility from the service tier (plan §4 Screen 3). Insurance is always the landlord's. */
@@ -46,7 +48,7 @@ export async function insertObligations(
   const ids: Id<"obligations">[] = [];
   for (const d of drafts) {
     if (open.has(d.templateCode)) continue;
-    if (!TEMPLATE.has(d.templateCode)) throw new Error(`Unknown requirement: ${d.templateCode}`);
+    if (!TEMPLATE.has(d.templateCode)) throw new ConvexError(`Unknown requirement: ${d.templateCode}`);
     ids.push(await ctx.db.insert("obligations", { ...scope, ...d, responsibility: responsibilityFor(client, d.templateCode), isDemo }));
   }
   return ids;
@@ -55,10 +57,10 @@ export async function insertObligations(
 /** Record evidence: satisfies one obligation and opens whatever comes next (plan §5.1). */
 export async function recordEvidence(ctx: MutationCtx, obligationId: Id<"obligations">, input: EvidenceInput & { oneDriveFileName?: string; notes?: string }) {
   const o = await ctx.db.get(obligationId);
-  if (!o) throw new Error("Obligation not found");
-  if (o.satisfiedAt || o.isNotApplicable) throw new Error("This item is already closed");
+  if (!o) throw new ConvexError("Obligation not found");
+  if (o.satisfiedAt || o.isNotApplicable) throw new ConvexError("This item is already closed");
   const t = TEMPLATE.get(o.templateCode);
-  if (!t) throw new Error(`Unknown requirement: ${o.templateCode}`);
+  if (!t) throw new ConvexError(`Unknown requirement: ${o.templateCode}`);
   const evidenceId = await ctx.db.insert("evidence", { obligationId, ...input, recordedAt: Date.now(), isDemo: o.isDemo });
   await ctx.db.patch(obligationId, { satisfiedAt: input.issueDate && input.issueDate <= today() ? input.issueDate : today(), disposition: undefined });
   const next = nextObligations({ templateCode: o.templateCode, kind: t.kind }, input);

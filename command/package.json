@@ -8,19 +8,25 @@
     "start": "next start",
     "convex": "CONVEX_AGENT_MODE=anonymous convex dev",
     "seed": "convex run seed:reset",
-    "test": "node --test src/lib/*.test.ts",
+    "test": "node --test src/lib/*.test.ts && vitest run",
     "typecheck": "tsc --noEmit && tsc --noEmit -p convex"
   },
   "dependencies": {
+    "@azure/msal-browser": "^5.30.0",
+    "@azure/msal-react": "^5.8.3",
     "convex": "^1.51.0",
+    "convex-helpers": "^0.1.136",
     "next": "^16.4.6",
     "react": "^19.3.1",
     "react-dom": "^19.3.1"
   },
   "devDependencies": {
+    "@edge-runtime/vm": "^5.0.0",
     "@types/node": "^26.6.6",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
-    "typescript": "^5.9.3"
+    "convex-test": "^0.0.73",
+    "typescript": "^5.9.3",
+    "vitest": "^5.1.1"
   }
 }

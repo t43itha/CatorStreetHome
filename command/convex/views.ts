@@ -1,7 +1,6 @@
 // Read models for each screen. All reads go through loadRows + toCommandData so status has one owner.
-// NOTE: unguarded until Step 1.1b. Local only. Reads whole tables: fine at demo scale, index before live import.
 import { v } from "convex/values";
-import { query } from "./_generated/server";
+import { userQuery } from "./lib/functions";
 import type { Id } from "./_generated/dataModel";
 import { loadRows } from "./model";
 import { toCommandData, type ComplianceItem } from "../src/lib/model.ts";
@@ -17,7 +16,7 @@ function health(items: ComplianceItem[], today: string) {
   return { ...counts, good: counts.current + counts.done, applicable, worst: worst ? { label: worst.i.label, status: worst.s, dueDate: worst.i.dueDate } : null };
 }
 
-export const clients = query({
+export const clients = userQuery({
   args: { today: v.string() },
   handler: async (ctx, { today }) => {
     const rows = await loadRows(ctx);
@@ -34,7 +33,7 @@ export const clients = query({
   },
 });
 
-export const client = query({
+export const client = userQuery({
   args: { id: v.id("clients"), today: v.string() },
   handler: async (ctx, { id, today }) => {
     const rows = await loadRows(ctx);
@@ -53,7 +52,7 @@ export const client = query({
   },
 });
 
-export const properties = query({
+export const properties = userQuery({
   args: { today: v.string() },
   handler: async (ctx, { today }) => {
     const rows = await loadRows(ctx);
@@ -71,7 +70,7 @@ export const properties = query({
   },
 });
 
-export const property = query({
+export const property = userQuery({
   args: { id: v.id("properties"), today: v.string() },
   handler: async (ctx, { id, today }) => {
     const rows = await loadRows(ctx);
@@ -90,7 +89,7 @@ export const property = query({
   },
 });
 
-export const actions = query({
+export const actions = userQuery({
   args: {},
   handler: async (ctx) => {
     const [clients, commitments] = await Promise.all([ctx.db.query("clients").collect(), ctx.db.query("commitments").collect()]);
@@ -99,7 +98,7 @@ export const actions = query({
   },
 });
 
-export const emailCentre = query({
+export const emailCentre = userQuery({
   args: {},
   handler: async (ctx) => {
     const reminders = await ctx.db.query("reminders").collect();
@@ -111,9 +110,9 @@ export const emailCentre = query({
   },
 });
 
-export const meetings = query({ args: {}, handler: async (ctx) => (await ctx.db.query("meetings").collect()).sort((a, b) => b.scheduledAt.localeCompare(a.scheduledAt)) });
+export const meetings = userQuery({ args: {}, handler: async (ctx) => (await ctx.db.query("meetings").collect()).sort((a, b) => b.scheduledAt.localeCompare(a.scheduledAt)) });
 
-export const meeting = query({
+export const meeting = userQuery({
   args: { id: v.id("meetings") },
   handler: async (ctx, { id }) => {
     const m = await ctx.db.get(id);
@@ -123,7 +122,7 @@ export const meeting = query({
   },
 });
 
-export const search = query({
+export const search = userQuery({
   args: { q: v.string() },
   handler: async (ctx, { q }) => {
     const needle = q.trim().toLowerCase();
@@ -149,7 +148,7 @@ export const search = query({
 });
 
 /** Home "Onboarding in progress": clients and properties still onboarding, with their next step. */
-export const onboardingInProgress = query({
+export const onboardingInProgress = userQuery({
   args: { today: v.string() },
   handler: async (ctx, { today }) => {
     const [clients, properties, obligations] = await Promise.all([ctx.db.query("clients").collect(), ctx.db.query("properties").collect(), ctx.db.query("obligations").collect()]);

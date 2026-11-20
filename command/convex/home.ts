@@ -1,15 +1,13 @@
 import { v } from "convex/values";
-import { query } from "./_generated/server";
+import { userQuery } from "./lib/functions";
 import { toCommandData } from "../src/lib/model.ts";
 
 /**
  * Everything the screens read, in the CommandData shape. `today` is the London date the caller
  * renders for, so the page and the query never disagree around midnight.
  *
- * NOTE: public and unguarded. Local development only until Step 1.1b adds the requireUser
- * wrappers (plan §8.3). Do not deploy before then.
  */
-export const data = query({
+export const data = userQuery({
   args: { today: v.string() },
   handler: async (ctx, { today }) => {
     const [clients, properties, tenancies, requirementTemplates, obligations, evidence, reminders, commitments, meetings, emails] =

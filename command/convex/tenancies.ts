@@ -1,6 +1,5 @@
-// NOTE: unguarded until Step 1.1b. Local only.
-import { v } from "convex/values";
-import { mutation } from "./_generated/server";
+import { ConvexError, v } from "convex/values";
+import { userMutation } from "./lib/functions";
 import type { Id } from "./_generated/dataModel";
 import type { MutationCtx } from "./_generated/server";
 import { insertObligations, logActivity } from "./model";
@@ -14,8 +13,8 @@ export interface TenancyInput {
 /** Every tenancy is assured periodic (no end date) since 1 May 2026. */
 export async function startTenancy(ctx: MutationCtx, a: TenancyInput) {
   const p = await ctx.db.get(a.propertyId);
-  if (!p) throw new Error("Property not found");
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(a.startDate)) throw new Error("Enter the tenancy start date");
+  if (!p) throw new ConvexError("Property not found");
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(a.startDate)) throw new ConvexError("Enter the tenancy start date");
   for (const t of await ctx.db.query("tenancies").withIndex("by_property", (q) => q.eq("propertyId", a.propertyId)).collect()) {
     if (t.status === "active") await ctx.db.patch(t._id, { status: "ended" });
   }
@@ -27,7 +26,7 @@ export async function startTenancy(ctx: MutationCtx, a: TenancyInput) {
   return tenancyId;
 }
 
-export const start = mutation({
+export const start = userMutation({
   args: {
     propertyId: v.id("properties"), tenants: v.array(v.object({ name: v.string(), email: v.optional(v.string()) })), startDate: v.string(),
     rentGbp: v.optional(v.number()), depositAmountGbp: v.optional(v.number()), depositReceivedDate: v.optional(v.string()), depositScheme: v.optional(v.string()),

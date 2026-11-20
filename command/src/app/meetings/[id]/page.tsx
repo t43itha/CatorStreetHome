@@ -4,11 +4,11 @@ import { Shell } from "@/components/Shell.tsx";
 import { Icon } from "@/components/Icons.tsx";
 import { MeetingWorkspace } from "@/components/MeetingWorkspace.tsx";
 import type { Id } from "../../../../convex/_generated/dataModel";
-import { api, read } from "@/lib/data.ts";
+import { api, readOrNull } from "@/lib/data.ts";
 
 export default async function MeetingPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const data = await read(api.views.meeting, { id: id as Id<"meetings"> }).catch(() => null);
+  const data = await readOrNull(api.views.meeting, { id: id as Id<"meetings"> });
   if (!data) notFound();
   const { meeting: m, client, actions } = data;
   return (

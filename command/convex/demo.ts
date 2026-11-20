@@ -1,5 +1,6 @@
-// Demo data: Settings → Reset / Clear (plan Screen 7). NOTE: unguarded until Step 1.1b (owner-only then). Local only.
-import { mutation } from "./_generated/server";
+// Demo data: Settings → Reset / Clear (plan Screen 7). Owner only.
+import { ConvexError } from "convex/values";
+import { ownerMutation } from "./lib/functions";
 import type { Id, TableNames } from "./_generated/dataModel";
 import type { MutationCtx } from "./_generated/server";
 import { demoRows } from "../src/lib/seedData.ts";
@@ -29,7 +30,7 @@ export async function seedDemo(ctx: MutationCtx) {
   const ids = new Map<string, Id<TableNames>>();
   const id = <T extends TableNames>(key: string) => {
     const found = ids.get(key);
-    if (!found) throw new Error(`Seed references unknown key ${key}`);
+    if (!found) throw new ConvexError(`Seed references unknown key ${key}`);
     return found as Id<T>;
   };
   const opt = <T extends TableNames>(key?: string) => (key ? id<T>(key) : undefined);
@@ -58,5 +59,5 @@ export async function seedDemo(ctx: MutationCtx) {
   return { obligations: rows.obligations.length };
 }
 
-export const reset = mutation({ args: {}, handler: (ctx) => seedDemo(ctx) });
-export const clear = mutation({ args: {}, handler: async (ctx) => { await clearDemo(ctx); await ensureTemplates(ctx); } });
+export const reset = ownerMutation({ args: {}, handler: (ctx) => seedDemo(ctx) });
+export const clear = ownerMutation({ args: {}, handler: async (ctx) => { await clearDemo(ctx); await ensureTemplates(ctx); } });

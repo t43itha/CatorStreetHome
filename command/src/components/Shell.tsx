@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { connection } from "next/server";
-import { getCommandData } from "@/lib/data.ts";
+import { api, getCommandData, read } from "@/lib/data.ts";
+import { initials } from "./bits.tsx";
+import { SignOut } from "./SignOut.tsx";
 import type { IconName } from "@/lib/model.ts";
 import { buildHome } from "@/lib/home.ts";
 import { todayLondon } from "@/lib/status.ts";
@@ -27,7 +29,9 @@ const ADMIN: Array<{ key: NavKey; label: string; icon: IconName; href: string }>
 export async function Shell({ active, children }: { active: NavKey; children: React.ReactNode }) {
   await connection();
   const today = todayLondon();
-  const urgentCount = buildHome(await getCommandData(today), today).urgent.length;
+  const [data, me] = await Promise.all([getCommandData(today), read(api.users.me, {})]);
+  const urgentCount = buildHome(data, today).urgent.length;
+  const name = me?.name ?? me?.email ?? "";
 
   return (
     <div className="app">
@@ -61,7 +65,7 @@ export async function Shell({ active, children }: { active: NavKey; children: Re
           <span className="demo">Demo data</span>
           <div className="spacer" />
           <NewAction text={<><Icon name="plus" />Quick capture</>} />
-          <div className="avatar">TO</div>
+          <SignOut initials={initials(name || "?")} name={name} />
         </header>
         <main className="content">{children}</main>
       </div>

@@ -1,6 +1,5 @@
-// NOTE: unguarded until Step 1.1b. Local only.
-import { v } from "convex/values";
-import { mutation, query } from "./_generated/server";
+import { ConvexError, v } from "convex/values";
+import { userMutation, userQuery } from "./lib/functions";
 import type { Id } from "./_generated/dataModel";
 import type { MutationCtx, QueryCtx } from "./_generated/server";
 import { licenceType } from "./schema";
@@ -16,7 +15,7 @@ export async function possibleDuplicates(ctx: QueryCtx, q: { postcode: string; a
   return Promise.all(hits.map(async (p) => ({ propertyId: p._id, clientId: p.clientId, clientName: (await ctx.db.get(p.clientId))?.name ?? "", address: `${p.addressLine1}, ${p.postcode}` })));
 }
 
-export const findPossibleDuplicates = query({
+export const findPossibleDuplicates = userQuery({
   args: { postcode: v.string(), addressLine1: v.string() },
   handler: (ctx, q) => possibleDuplicates(ctx, q),
 });
@@ -25,7 +24,7 @@ export const findPossibleDuplicates = query({
 export const areaFor = (postcode: string): "London" | "Kent" => (/^(ME|CT|TN|DA)\d/i.test(postcode.trim()) ? "Kent" : "London");
 
 export async function addProperty(ctx: MutationCtx, a: { clientId: Id<"clients">; addressLine1: string; postcode: string; hasGas: boolean; licenceType: LicenceType; oneDriveFolderUrl?: string }) {
-  if (!a.addressLine1.trim() || !a.postcode.trim()) throw new Error("Enter the address and postcode");
+  if (!a.addressLine1.trim() || !a.postcode.trim()) throw new ConvexError("Enter the address and postcode");
   const propertyId = await ctx.db.insert("properties", {
     ...a, addressLine1: a.addressLine1.trim(), postcode: a.postcode.trim().toUpperCase(), area: areaFor(a.postcode),
     status: "onboarding", onboardingStartedAt: today(), isDemo: false,
@@ -36,17 +35,17 @@ export async function addProperty(ctx: MutationCtx, a: { clientId: Id<"clients">
 }
 
 /** New properties start in `onboarding`, so reminders wait until the property is activated. */
-export const add = mutation({
+export const add = userMutation({
   args: { clientId: v.id("clients"), addressLine1: v.string(), postcode: v.string(), hasGas: v.boolean(), licenceType, oneDriveFolderUrl: v.optional(v.string()) },
   handler: (ctx, a) => addProperty(ctx, a),
 });
 
 /** Changing a flag re-runs applicability: N/A ↔ required (plan Screen 2b). */
-export const updateFlags = mutation({
+export const updateFlags = userMutation({
   args: { id: v.id("properties"), hasGas: v.optional(v.boolean()), licenceType: v.optional(licenceType) },
   handler: async (ctx, { id, ...flags }) => {
     const p = await ctx.db.get(id);
-    if (!p) throw new Error("Property not found");
+    if (!p) throw new ConvexError("Property not found");
     await ctx.db.patch(id, flags);
     const next = { ...p, ...flags };
     const drafts = propertyObligations(next);
