@@ -1,8 +1,7 @@
 // Bulk import (plan Screen 7). Row by row through the same helpers onboarding uses.
 // Imported clients and properties start in `onboarding`, so no reminder drafts until each is activated.
-// NOTE: unguarded until Step 1.1b (owner-only then). Local only.
 import { v } from "convex/values";
-import { mutation } from "./_generated/server";
+import { ownerMutation } from "./lib/functions";
 import type { Id } from "./_generated/dataModel";
 import type { MutationCtx } from "./_generated/server";
 import { createClient, possibleDuplicates as clientDuplicates } from "./clients";
@@ -26,7 +25,7 @@ async function setDue(ctx: MutationCtx, propertyId: Id<"properties">, templateCo
   if (o) await ctx.db.patch(o._id, { dueDate, isNotApplicable: false, naReason: undefined });
 }
 
-export const commit = mutation({
+export const commit = ownerMutation({
   args: { rows: v.array(row) },
   handler: async (ctx, { rows }) => {
     const result = { clients: 0, properties: 0, tenancies: 0, skipped: [] as string[] };

@@ -6,7 +6,7 @@ import { Act } from "@/components/Act.tsx";
 import { ComplianceRows, ComplianceScore } from "@/components/ComplianceMatrix.tsx";
 import { NewAction } from "@/components/forms.tsx";
 import type { Id } from "../../../../convex/_generated/dataModel";
-import { api, read } from "@/lib/data.ts";
+import { api, readOrNull } from "@/lib/data.ts";
 import { formatShortDate, todayLondon } from "@/lib/status.ts";
 
 const LICENCE = { none: "No licence required", selective: "Selective licence", additional: "Additional licence", hmo: "HMO licence" } as const;
@@ -16,7 +16,7 @@ const longDate = (iso?: string) => (iso ? new Intl.DateTimeFormat("en-GB", { day
 export default async function PropertyPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const today = todayLondon();
-  const data = await read(api.views.property, { id: id as Id<"properties">, today }).catch(() => null);
+  const data = await readOrNull(api.views.property, { id: id as Id<"properties">, today });
   if (!data) notFound();
   const { property: p, client: c, tenancy: t, items, actions, activity } = data;
 

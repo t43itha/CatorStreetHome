@@ -1,7 +1,6 @@
 // Onboarding is a view over ordinary records (plan Screen 2b, shape B): progress is derived, never stored.
-// NOTE: unguarded until Step 1.1b. Local only.
-import { v } from "convex/values";
-import { mutation, query } from "./_generated/server";
+import { ConvexError, v } from "convex/values";
+import { ownerMutation, userMutation, userQuery } from "./lib/functions";
 import type { Doc, Id } from "./_generated/dataModel";
 import type { MutationCtx, QueryCtx } from "./_generated/server";
 import { getSettings, logActivity, today } from "./model";
@@ -15,7 +14,7 @@ const stillToEnter = (o: O) => open(o) && !o.dueDate && !o.disposition;
 
 async function scopeOf(ctx: QueryCtx, clientId: Id<"clients">) {
   const client = await ctx.db.get(clientId);
-  if (!client) throw new Error("Client not found");
+  if (!client) throw new ConvexError("Client not found");
   const properties = await ctx.db.query("properties").withIndex("by_client", (q) => q.eq("clientId", clientId)).collect();
   const obligations = await ctx.db.query("obligations").withIndex("by_client", (q) => q.eq("clientId", clientId)).collect();
   const tenancies = (await Promise.all(properties.map((p) => ctx.db.query("tenancies").withIndex("by_property", (q) => q.eq("propertyId", p._id)).collect()))).flat();
@@ -24,7 +23,7 @@ async function scopeOf(ctx: QueryCtx, clientId: Id<"clients">) {
 
 const label = (o: O) => TEMPLATE.get(o.templateCode)?.name ?? o.templateCode;
 
-export const progress = query({
+export const progress = userQuery({
   args: { clientId: v.id("clients") },
   handler: async (ctx, { clientId }) => {
     const { client, properties, obligations, tenancies } = await scopeOf(ctx, clientId);
@@ -85,7 +84,7 @@ async function requestOnce(ctx: MutationCtx, client: Doc<"clients">, key: string
   return { reminderId, actionId };
 }
 
-export const activate = mutation({
+export const activate = userMutation({
   args: { clientId: v.id("clients"), draftRequestEmail: v.boolean() },
   handler: async (ctx, { clientId, draftRequestEmail }) => {
     const { client, properties, obligations } = await scopeOf(ctx, clientId);
@@ -99,11 +98,11 @@ export const activate = mutation({
   },
 });
 
-export const activateProperty = mutation({
+export const activateProperty = userMutation({
   args: { propertyId: v.id("properties"), draftRequestEmail: v.boolean() },
   handler: async (ctx, { propertyId, draftRequestEmail }) => {
     const p = await ctx.db.get(propertyId);
-    if (!p) throw new Error("Property not found");
+    if (!p) throw new ConvexError("Property not found");
     const client = (await ctx.db.get(p.clientId))!;
     await ctx.db.patch(propertyId, { status: "active" });
     const os = await ctx.db.query("obligations").withIndex("by_property", (q) => q.eq("propertyId", propertyId)).collect();
@@ -113,12 +112,12 @@ export const activateProperty = mutation({
 });
 
 /** Discard is only possible while onboarding and before any evidence exists (audit trail). */
-export const discard = mutation({
+export const discard = ownerMutation({
   args: { clientId: v.id("clients") },
   handler: async (ctx, { clientId }) => {
     const { client, properties, obligations, tenancies } = await scopeOf(ctx, clientId);
-    if (client.status !== "onboarding") throw new Error("Only a client still in onboarding can be discarded. Set the status to Former instead.");
-    for (const o of obligations) if (await ctx.db.query("evidence").withIndex("by_obligation", (q) => q.eq("obligationId", o._id)).first()) throw new Error("Evidence has been recorded, so this client can't be discarded");
+    if (client.status !== "onboarding") throw new ConvexError("Only a client still in onboarding can be discarded. Set the status to Former instead.");
+    for (const o of obligations) if (await ctx.db.query("evidence").withIndex("by_obligation", (q) => q.eq("obligationId", o._id)).first()) throw new ConvexError("Evidence has been recorded, so this client can't be discarded");
     for (const row of [...obligations, ...tenancies, ...properties]) await ctx.db.delete(row._id);
     for (const r of await ctx.db.query("reminders").collect()) if (r.clientId === clientId) await ctx.db.delete(r._id);
     for (const c of await ctx.db.query("commitments").withIndex("by_client", (q) => q.eq("clientId", clientId)).collect()) await ctx.db.delete(c._id);

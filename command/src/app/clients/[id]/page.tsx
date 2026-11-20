@@ -6,13 +6,13 @@ import { Act } from "@/components/Act.tsx";
 import { HealthBar, healthText, initials, WorstPill } from "@/components/bits.tsx";
 import { MarkNotApplicable, NewAction, RecordEvidence } from "@/components/forms.tsx";
 import type { Id } from "../../../../convex/_generated/dataModel";
-import { api, read } from "@/lib/data.ts";
+import { api, readOrNull } from "@/lib/data.ts";
 import { diffCalendarDays, formatShortDate, STATUS_LABEL, todayLondon } from "@/lib/status.ts";
 
 export default async function ClientPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const today = todayLondon();
-  const data = await read(api.views.client, { id: id as Id<"clients">, today }).catch(() => null);
+  const data = await readOrNull(api.views.client, { id: id as Id<"clients">, today });
   if (!data) notFound();
   const { client: c, properties, docs, actions, activity, portfolio } = data;
   const open = actions.filter((a) => a.status !== "done");

@@ -14,6 +14,7 @@ import type * as demo from "../demo.js";
 import type * as emails from "../emails.js";
 import type * as home from "../home.js";
 import type * as imports from "../imports.js";
+import type * as lib_functions from "../lib/functions.js";
 import type * as meetings from "../meetings.js";
 import type * as model from "../model.js";
 import type * as obligations from "../obligations.js";
@@ -23,6 +24,7 @@ import type * as reminders from "../reminders.js";
 import type * as seed from "../seed.js";
 import type * as settings from "../settings.js";
 import type * as tenancies from "../tenancies.js";
+import type * as users from "../users.js";
 import type * as views from "../views.js";
 
 import type {
@@ -38,6 +40,7 @@ declare const fullApi: ApiFromModules<{
   emails: typeof emails;
   home: typeof home;
   imports: typeof imports;
+  "lib/functions": typeof lib_functions;
   meetings: typeof meetings;
   model: typeof model;
   obligations: typeof obligations;
@@ -47,6 +50,7 @@ declare const fullApi: ApiFromModules<{
   seed: typeof seed;
   settings: typeof settings;
   tenancies: typeof tenancies;
+  users: typeof users;
   views: typeof views;
 }>;
 
